@@ -1,0 +1,10 @@
+node_modules/
+build/
+*.log
+.tree-sitter/
+prebuilds/
+*.dylib
+*.so
+*.dll
+.DS_Store
+.claude/

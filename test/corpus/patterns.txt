@@ -1,0 +1,81 @@
+==================
+List pattern with rest
+==================
+
+fn head(xs: [Int]) : Int = match xs {
+  [x, ...rest] -> x
+  []           -> 0
+}
+
+---
+
+(source_file
+  (function_declaration
+    name: (lower_identifier)
+    parameters: (parameters
+      (parameter name: (lower_identifier) type: (list_type (type_identifier))))
+    return_type: (type_identifier)
+    body: (match_expression
+      scrutinee: (identifier (lower_identifier))
+      (match_arm
+        pattern: (list_pattern
+          (bind_pattern (lower_identifier))
+          (rest_pattern (lower_identifier)))
+        body: (identifier (lower_identifier)))
+      (match_arm
+        pattern: (list_pattern)
+        body: (literal (integer_literal))))))
+
+==================
+Variant pattern with payload
+==================
+
+fn unwrap(o: Option[Int]) : Int = match o {
+  Some(x) -> x
+  None    -> 0
+}
+
+---
+
+(source_file
+  (function_declaration
+    name: (lower_identifier)
+    parameters: (parameters
+      (parameter name: (lower_identifier)
+        type: (generic_type (type_identifier) (type_identifier))))
+    return_type: (type_identifier)
+    body: (match_expression
+      scrutinee: (identifier (lower_identifier))
+      (match_arm
+        pattern: (variant_pattern name: (type_identifier) (bind_pattern (lower_identifier)))
+        body: (identifier (lower_identifier)))
+      (match_arm
+        pattern: (variant_pattern name: (type_identifier))
+        body: (literal (integer_literal))))))
+
+==================
+Record pattern
+==================
+
+fn point_x(p: Point) : Int = match p {
+  Point { x: a, y: _ } -> a
+}
+
+---
+
+(source_file
+  (function_declaration
+    name: (lower_identifier)
+    parameters: (parameters
+      (parameter name: (lower_identifier) type: (type_identifier)))
+    return_type: (type_identifier)
+    body: (match_expression
+      scrutinee: (identifier (lower_identifier))
+      (match_arm
+        pattern: (record_pattern
+          type: (type_identifier)
+          (record_pattern_field name: (lower_identifier)
+            pattern: (bind_pattern (lower_identifier)))
+          (record_pattern_field name: (lower_identifier)
+            pattern: (wildcard_pattern)))
+        body: (identifier (lower_identifier))))))

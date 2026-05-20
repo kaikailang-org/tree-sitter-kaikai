@@ -1,0 +1,113 @@
+==================
+Effect declaration
+==================
+
+effect Io {
+  print(s: String) : Unit
+  read_line() : String
+}
+
+---
+
+(source_file
+  (effect_declaration
+    name: (type_identifier)
+    (effect_operation
+      name: (lower_identifier)
+      (parameters (parameter name: (lower_identifier) type: (type_identifier)))
+      return_type: (type_identifier))
+    (effect_operation
+      name: (lower_identifier)
+      (parameters)
+      return_type: (type_identifier))))
+
+==================
+Handle expression
+==================
+
+fn main() : Int = {
+  handle {
+    42
+  } with Io {
+    print(s, resume) -> resume(())
+    return(x)        -> x
+  }
+}
+
+---
+
+(source_file
+  (function_declaration
+    name: (lower_identifier)
+    parameters: (parameters)
+    return_type: (type_identifier)
+    body: (block
+      (handle_expression
+        body: (block (literal (integer_literal)))
+        effect: (type_identifier)
+        (handle_clause
+          name: (lower_identifier)
+          (lower_identifier)
+          (lower_identifier)
+          body: (call_expression
+            function: (identifier (lower_identifier))
+            arguments: (arguments (unit_expression))))
+        (handle_clause
+          (lower_identifier)
+          body: (identifier (lower_identifier)))))))
+
+==================
+Effect row with multiple labels
+==================
+
+fn perform() : Int / Io + Fail = 3
+
+---
+
+(source_file
+  (function_declaration
+    name: (lower_identifier)
+    parameters: (parameters)
+    return_type: (type_identifier)
+    row: (effect_row
+      (effect_label (type_identifier))
+      (effect_label (type_identifier)))
+    body: (literal (integer_literal))))
+
+==================
+Protocol and impl
+==================
+
+protocol Add[a] {
+  add(self: Self, rhs: a) : Self
+}
+
+impl Add for Int {
+  fn add(self: Int, rhs: Int) : Int = self + rhs
+}
+
+---
+
+(source_file
+  (protocol_declaration
+    name: (type_identifier)
+    type_parameters: (type_parameters
+      (type_parameter (lower_identifier)))
+    (protocol_signature
+      name: (lower_identifier)
+      parameters: (parameters
+        (parameter name: (lower_identifier) type: (type_identifier))
+        (parameter name: (lower_identifier) type: (lower_identifier)))
+      return_type: (type_identifier)))
+  (impl_declaration
+    protocol: (type_identifier)
+    target: (type_identifier)
+    (function_declaration
+      name: (lower_identifier)
+      parameters: (parameters
+        (parameter name: (lower_identifier) type: (type_identifier))
+        (parameter name: (lower_identifier) type: (type_identifier)))
+      return_type: (type_identifier)
+      body: (arithmetic_expression
+        left: (identifier (lower_identifier))
+        right: (identifier (lower_identifier))))))

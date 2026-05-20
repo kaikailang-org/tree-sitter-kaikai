@@ -1,0 +1,112 @@
+==================
+Match expression
+==================
+
+fn neg(b: Bool) : Bool = match b {
+  true  -> false
+  false -> true
+}
+
+---
+
+(source_file
+  (function_declaration
+    name: (lower_identifier)
+    parameters: (parameters
+      (parameter name: (lower_identifier) type: (type_identifier)))
+    return_type: (type_identifier)
+    body: (match_expression
+      scrutinee: (identifier (lower_identifier))
+      (match_arm
+        pattern: (literal_pattern (bool_literal))
+        body: (literal (bool_literal)))
+      (match_arm
+        pattern: (literal_pattern (bool_literal))
+        body: (literal (bool_literal))))))
+
+==================
+If expression
+==================
+
+fn abs(x: Int) : Int = if x < 0 { 0 - x } else { x }
+
+---
+
+(source_file
+  (function_declaration
+    name: (lower_identifier)
+    parameters: (parameters
+      (parameter name: (lower_identifier) type: (type_identifier)))
+    return_type: (type_identifier)
+    body: (if_expression
+      condition: (comparison_expression
+        left: (identifier (lower_identifier))
+        right: (literal (integer_literal)))
+      then: (block
+        (arithmetic_expression
+          left: (literal (integer_literal))
+          right: (identifier (lower_identifier))))
+      else: (block
+        (identifier (lower_identifier))))))
+
+==================
+Pipe expression
+==================
+
+fn pipeline(xs: [Int]) : Unit = xs |> map(double) |> each(println)
+
+---
+
+(source_file
+  (function_declaration
+    name: (lower_identifier)
+    parameters: (parameters
+      (parameter name: (lower_identifier) type: (list_type (type_identifier))))
+    return_type: (type_identifier)
+    body: (pipe_expression
+      left: (pipe_expression
+        left: (identifier (lower_identifier))
+        right: (call_expression
+          function: (identifier (lower_identifier))
+          arguments: (arguments (identifier (lower_identifier)))))
+      right: (call_expression
+        function: (identifier (lower_identifier))
+        arguments: (arguments (identifier (lower_identifier)))))))
+
+==================
+Lambda expression
+==================
+
+fn k() : Int = (x) => x + 1
+
+---
+
+(source_file
+  (function_declaration
+    name: (lower_identifier)
+    parameters: (parameters)
+    return_type: (type_identifier)
+    body: (lambda_expression
+      (lambda_params (parameter name: (lower_identifier)))
+      body: (arithmetic_expression
+        left: (identifier (lower_identifier))
+        right: (literal (integer_literal))))))
+
+==================
+String interpolation
+==================
+
+fn show(x: Int) : String = "x=#{x}"
+
+---
+
+(source_file
+  (function_declaration
+    name: (lower_identifier)
+    parameters: (parameters
+      (parameter name: (lower_identifier) type: (type_identifier)))
+    return_type: (type_identifier)
+    body: (literal
+      (string_literal
+        (string_content)
+        (interpolation (identifier (lower_identifier)))))))

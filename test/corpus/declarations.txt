@@ -1,0 +1,103 @@
+==================
+Hello world
+==================
+
+fn main() = println("Hello, kaikai")
+
+---
+
+(source_file
+  (function_declaration
+    name: (lower_identifier)
+    parameters: (parameters)
+    body: (call_expression
+      function: (identifier (lower_identifier))
+      arguments: (arguments
+        (literal (string_literal (string_content)))))))
+
+==================
+Function with return type and body
+==================
+
+fn add(x: Int, y: Int) : Int = x + y
+
+---
+
+(source_file
+  (function_declaration
+    name: (lower_identifier)
+    parameters: (parameters
+      (parameter name: (lower_identifier) type: (type_identifier))
+      (parameter name: (lower_identifier) type: (type_identifier)))
+    return_type: (type_identifier)
+    body: (arithmetic_expression
+      left: (identifier (lower_identifier))
+      right: (identifier (lower_identifier)))))
+
+==================
+Public function with block body
+==================
+
+pub fn greet(name: String) : Unit / Console = {
+  print("hi")
+}
+
+---
+
+(source_file
+  (function_declaration
+    name: (lower_identifier)
+    parameters: (parameters
+      (parameter name: (lower_identifier) type: (type_identifier)))
+    return_type: (type_identifier)
+    row: (effect_row (effect_label (type_identifier)))
+    body: (block
+      (call_expression
+        function: (identifier (lower_identifier))
+        arguments: (arguments
+          (literal (string_literal (string_content))))))))
+
+==================
+Const declaration
+==================
+
+const SCALE : Int = 100
+
+---
+
+(source_file
+  (const_declaration
+    name: (type_identifier)
+    type: (type_identifier)
+    value: (literal (integer_literal))))
+
+==================
+Sum type
+==================
+
+type Color = Red | Green | Blue
+
+---
+
+(source_file
+  (type_declaration
+    name: (type_identifier)
+    body: (sum_type
+      (variant name: (type_identifier))
+      (variant name: (type_identifier))
+      (variant name: (type_identifier)))))
+
+==================
+Record type
+==================
+
+type Person = { name: String, age: Int }
+
+---
+
+(source_file
+  (type_declaration
+    name: (type_identifier)
+    body: (record_type
+      (record_type_field name: (lower_identifier) type: (type_identifier))
+      (record_type_field name: (lower_identifier) type: (type_identifier)))))

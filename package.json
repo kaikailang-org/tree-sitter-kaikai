@@ -1,0 +1,48 @@
+{
+  "name": "tree-sitter-kaikai",
+  "version": "0.1.0",
+  "description": "Tree-sitter grammar for the kaikai programming language",
+  "main": "bindings/node",
+  "types": "bindings/node",
+  "keywords": [
+    "incremental",
+    "parsing",
+    "tree-sitter",
+    "kaikai"
+  ],
+  "author": "kaikai project",
+  "license": "MIT",
+  "homepage": "https://github.com/kaikailang-org/tree-sitter-kaikai",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/kaikailang-org/tree-sitter-kaikai.git"
+  },
+  "files": [
+    "grammar.js",
+    "binding.gyp",
+    "queries/",
+    "src/**",
+    "bindings/node/*"
+  ],
+  "tree-sitter": [
+    {
+      "scope": "source.kaikai",
+      "file-types": ["kai"],
+      "highlights": "queries/highlights.scm",
+      "injections": "queries/injections.scm",
+      "folds": "queries/folds.scm",
+      "indents": "queries/indents.scm"
+    }
+  ],
+  "dependencies": {
+    "node-addon-api": "^8.0.0",
+    "node-gyp-build": "^4.8.0"
+  },
+  "devDependencies": {
+    "tree-sitter-cli": "^0.26.9"
+  },
+  "scripts": {
+    "build": "tree-sitter generate && node-gyp build",
+    "test": "tree-sitter test"
+  }
+}
