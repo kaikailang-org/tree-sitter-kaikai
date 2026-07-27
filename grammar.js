@@ -62,6 +62,7 @@ module.exports = grammar({
       $.bench_declaration,
       $.check_declaration,
       $.theory_declaration,
+      $.kind_declaration,
       $.axiom_declaration,
       $.attribute,
     ),
@@ -375,6 +376,19 @@ module.exports = grammar({
       field('label', $.string_literal),
       optional(seq('with', sepBy1(',', field('parameter', $.parameter)))),
       field('body', $.block),
+    ),
+
+    // `kind Name : Theory [over Domain] with <introducer>`. Both `over`
+    // and the introducer word are contextual, not reserved.
+    kind_declaration: $ => seq(
+      optional('pub'),
+      'kind',
+      field('name', $.type_identifier),
+      ':',
+      field('theory', $.type_identifier),
+      optional(seq('over', field('domain', $.type_identifier))),
+      'with',
+      field('introducer', choice($.lower_identifier, $.type_identifier)),
     ),
 
     // A theory is `theory Name = builtin` or `theory Name = { prop, ... }`.
@@ -692,11 +706,14 @@ module.exports = grammar({
       '}',
     ),
 
-    _block_item: $ => choice(
-      $.let_statement,
-      $.assert_statement,
-      $.assignment_statement,
-      prec(-1, $._expression),
+    _block_item: $ => seq(
+      choice(
+        $.let_statement,
+        $.assert_statement,
+        $.assignment_statement,
+        prec(-1, $._expression),
+      ),
+      optional(';'),
     ),
 
     let_statement: $ => prec(1, seq(
