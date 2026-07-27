@@ -4470,6 +4470,16 @@
     "type": "handle_expression",
     "named": true,
     "fields": {
+      "arguments": {
+        "multiple": false,
+        "required": false,
+        "types": [
+          {
+            "type": "arguments",
+            "named": true
+          }
+        ]
+      },
       "body": {
         "multiple": false,
         "required": true,
@@ -4484,6 +4494,10 @@
         "multiple": false,
         "required": true,
         "types": [
+          {
+            "type": "generic_type",
+            "named": true
+          },
           {
             "type": "type_identifier",
             "named": true
