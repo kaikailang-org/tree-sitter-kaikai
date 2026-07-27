@@ -111,7 +111,10 @@ module.exports = grammar({
     import_declaration: $ => seq(
       'import',
       field('path', $.module_path),
-      optional(seq('as', field('alias', $.lower_identifier))),
+      optional(choice(
+        seq('as', field('alias', $.lower_identifier)),
+        seq('.', '{', sepBy1(',', field('name', $.use_name)), '}'),
+      )),
     ),
 
     use_declaration: $ => seq(
@@ -225,13 +228,16 @@ module.exports = grammar({
     _type_body: $ => choice(
       $.sum_type,
       prec(2, $.record_type),
+      $.refined_type,
       $._type,
     ),
 
-    sum_type: $ => prec.right(seq(
-      optional('|'),
-      $.variant,
-      repeat1(seq('|', $.variant)),
+    // A single-variant sum (`type CharRange = CR(Char, Char)`) is a sum
+    // too — the payload parentheses are what set it apart from an alias.
+    sum_type: $ => prec.right(choice(
+      seq(optional('|'), $.variant, repeat1(seq('|', $.variant))),
+      seq('|', $.variant),
+      prec(3, seq(field('name', $.type_identifier), field('payload', $.variant_payload))),
     )),
 
     variant: $ => seq(
@@ -255,7 +261,7 @@ module.exports = grammar({
       optional('priv'),
       field('name', $.lower_identifier),
       ':',
-      field('type', $._type),
+      field('type', choice($.refined_type, $._type)),
     ),
 
     effect_declaration: $ => seq(
@@ -336,9 +342,12 @@ module.exports = grammar({
 
     // The unit name is any identifier — `unit m`, not just `unit Metre`.
     // With `=` the unit aliases a measure expression.
+    // Habitant introducers, one per kind: `unit m`, `perm read`,
+    // `currency USD`, `region r`, `layout l`. Only `unit` takes an alias
+    // body. See base_intros() in stage2/compiler/kinds.kai.
     unit_declaration: $ => seq(
       optional('pub'),
-      'unit',
+      field('introducer', choice('unit', 'currency', 'perm', 'region', 'layout')),
       field('name', choice($.lower_identifier, $.type_identifier)),
       optional(seq('=', field('alias', $._unit_expr))),
     ),
@@ -390,10 +399,25 @@ module.exports = grammar({
       $._type_atom,
     ),
 
+    // `Int where >= 0`, `String where matches ~r/.../`. A bare comparison
+    // takes `self` as its implicit left operand. Kept out of `_type` so it
+    // does not collide with the `where` clause of `impl ... for T`.
+    refined_type: $ => prec.right(seq(
+      $._type_atom,
+      'where',
+      field('predicate', choice(
+        seq($._comparison_operator, $._expression),
+        $._expression,
+      )),
+    )),
+
+    _comparison_operator: $ => choice('==', '!=', '<', '<=', '>', '>='),
+
     function_type: $ => prec.right(1, seq(
       choice($._type_atom, $.parenthesized_type_list),
       '->',
       $._type,
+      optional(field('row', $.effect_row)),
     )),
 
     parenthesized_type_list: $ => seq(
@@ -443,10 +467,10 @@ module.exports = grammar({
 
     type_hole: $ => '?',
 
-    effect_row: $ => seq(
+    effect_row: $ => prec.right(seq(
       '/',
       sepBy1('+', $.effect_label),
-    ),
+    )),
 
     effect_label: $ => choice(
       $.type_identifier,
@@ -591,7 +615,7 @@ module.exports = grammar({
       choice('let', 'var'),
       field('pattern', $._pattern),
       optional(seq(':', field('type', $._type))),
-      '=',
+      choice('=', ':='),
       field('value', $._expression),
     ),
 
@@ -654,7 +678,7 @@ module.exports = grammar({
       choice('let', 'var'),
       field('pattern', $._pattern),
       optional(seq(':', field('type', $._type))),
-      '=',
+      choice('=', ':='),
       field('value', $._expression),
     )),
 
