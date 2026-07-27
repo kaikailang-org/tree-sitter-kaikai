@@ -4288,6 +4288,10 @@
           "named": true
         },
         {
+          "type": "effect_sum",
+          "named": true
+        },
+        {
           "type": "function_type",
           "named": true
         },
