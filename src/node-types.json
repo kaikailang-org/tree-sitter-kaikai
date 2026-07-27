@@ -133,6 +133,10 @@
           "named": true
         },
         {
+          "type": "try_expression",
+          "named": true
+        },
+        {
           "type": "tuple_expression",
           "named": true
         },
@@ -269,6 +273,10 @@
           },
           {
             "type": "record_expression",
+            "named": true
+          },
+          {
+            "type": "try_expression",
             "named": true
           },
           {
@@ -429,6 +437,10 @@
           },
           {
             "type": "record_expression",
+            "named": true
+          },
+          {
+            "type": "try_expression",
             "named": true
           },
           {
@@ -673,6 +685,10 @@
             "named": true
           },
           {
+            "type": "try_expression",
+            "named": true
+          },
+          {
             "type": "tuple_expression",
             "named": true
           },
@@ -810,6 +826,10 @@
         },
         {
           "type": "record_expression",
+          "named": true
+        },
+        {
+          "type": "try_expression",
           "named": true
         },
         {
@@ -967,6 +987,10 @@
           },
           {
             "type": "record_expression",
+            "named": true
+          },
+          {
+            "type": "try_expression",
             "named": true
           },
           {
@@ -1255,6 +1279,10 @@
           "named": true
         },
         {
+          "type": "try_expression",
+          "named": true
+        },
+        {
           "type": "tuple_expression",
           "named": true
         },
@@ -1477,6 +1505,10 @@
             "named": true
           },
           {
+            "type": "try_expression",
+            "named": true
+          },
+          {
             "type": "tuple_expression",
             "named": true
           },
@@ -1608,6 +1640,10 @@
           },
           {
             "type": "record_expression",
+            "named": true
+          },
+          {
+            "type": "try_expression",
             "named": true
           },
           {
@@ -1860,6 +1896,10 @@
             "named": true
           },
           {
+            "type": "try_expression",
+            "named": true
+          },
+          {
             "type": "tuple_expression",
             "named": true
           },
@@ -2024,6 +2064,10 @@
             "named": true
           },
           {
+            "type": "try_expression",
+            "named": true
+          },
+          {
             "type": "tuple_expression",
             "named": true
           },
@@ -2161,6 +2205,10 @@
           },
           {
             "type": "record_expression",
+            "named": true
+          },
+          {
+            "type": "try_expression",
             "named": true
           },
           {
@@ -2305,6 +2353,10 @@
           },
           {
             "type": "record_expression",
+            "named": true
+          },
+          {
+            "type": "try_expression",
             "named": true
           },
           {
@@ -2500,6 +2552,10 @@
             "named": true
           },
           {
+            "type": "try_expression",
+            "named": true
+          },
+          {
             "type": "tuple_expression",
             "named": true
           },
@@ -2655,6 +2711,10 @@
             "named": true
           },
           {
+            "type": "try_expression",
+            "named": true
+          },
+          {
             "type": "tuple_expression",
             "named": true
           },
@@ -2807,6 +2867,10 @@
           },
           {
             "type": "record_expression",
+            "named": true
+          },
+          {
+            "type": "try_expression",
             "named": true
           },
           {
@@ -2967,6 +3031,10 @@
         },
         {
           "type": "record_expression",
+          "named": true
+        },
+        {
+          "type": "try_expression",
           "named": true
         },
         {
@@ -3189,6 +3257,21 @@
       "types": [
         {
           "type": "effect_label",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "effect_sum",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": true,
+      "types": [
+        {
+          "type": "type_identifier",
           "named": true
         }
       ]
@@ -3505,6 +3588,10 @@
             "named": true
           },
           {
+            "type": "try_expression",
+            "named": true
+          },
+          {
             "type": "tuple_expression",
             "named": true
           },
@@ -3704,6 +3791,10 @@
           },
           {
             "type": "record_expression",
+            "named": true
+          },
+          {
+            "type": "try_expression",
             "named": true
           },
           {
@@ -4046,6 +4137,10 @@
             "named": true
           },
           {
+            "type": "try_expression",
+            "named": true
+          },
+          {
             "type": "tuple_expression",
             "named": true
           },
@@ -4268,6 +4363,10 @@
           },
           {
             "type": "record_expression",
+            "named": true
+          },
+          {
+            "type": "try_expression",
             "named": true
           },
           {
@@ -4571,6 +4670,10 @@
             "named": true
           },
           {
+            "type": "try_expression",
+            "named": true
+          },
+          {
             "type": "tuple_expression",
             "named": true
           },
@@ -4729,6 +4832,10 @@
           "named": true
         },
         {
+          "type": "try_expression",
+          "named": true
+        },
+        {
           "type": "tuple_expression",
           "named": true
         },
@@ -4879,6 +4986,10 @@
           "named": true
         },
         {
+          "type": "try_expression",
+          "named": true
+        },
+        {
           "type": "tuple_expression",
           "named": true
         },
@@ -5015,6 +5126,10 @@
           },
           {
             "type": "record_expression",
+            "named": true
+          },
+          {
+            "type": "try_expression",
             "named": true
           },
           {
@@ -5279,6 +5394,10 @@
             "named": true
           },
           {
+            "type": "try_expression",
+            "named": true
+          },
+          {
             "type": "tuple_expression",
             "named": true
           },
@@ -5511,6 +5630,10 @@
             "named": true
           },
           {
+            "type": "try_expression",
+            "named": true
+          },
+          {
             "type": "tuple_expression",
             "named": true
           },
@@ -5652,6 +5775,10 @@
         },
         {
           "type": "spread_expression",
+          "named": true
+        },
+        {
+          "type": "try_expression",
           "named": true
         },
         {
@@ -5966,6 +6093,10 @@
             "named": true
           },
           {
+            "type": "try_expression",
+            "named": true
+          },
+          {
             "type": "tuple_expression",
             "named": true
           },
@@ -6114,6 +6245,10 @@
             "named": true
           },
           {
+            "type": "try_expression",
+            "named": true
+          },
+          {
             "type": "tuple_expression",
             "named": true
           },
@@ -6254,6 +6389,10 @@
             "named": true
           },
           {
+            "type": "try_expression",
+            "named": true
+          },
+          {
             "type": "tuple_expression",
             "named": true
           },
@@ -6385,6 +6524,10 @@
           },
           {
             "type": "record_expression",
+            "named": true
+          },
+          {
+            "type": "try_expression",
             "named": true
           },
           {
@@ -6579,6 +6722,10 @@
           },
           {
             "type": "record_expression",
+            "named": true
+          },
+          {
+            "type": "try_expression",
             "named": true
           },
           {
@@ -6794,6 +6941,10 @@
           "named": true
         },
         {
+          "type": "try_expression",
+          "named": true
+        },
+        {
           "type": "tuple_expression",
           "named": true
         },
@@ -6930,6 +7081,10 @@
         },
         {
           "type": "record_expression",
+          "named": true
+        },
+        {
+          "type": "try_expression",
           "named": true
         },
         {
@@ -7141,6 +7296,10 @@
           "named": true
         },
         {
+          "type": "try_expression",
+          "named": true
+        },
+        {
           "type": "tuple_expression",
           "named": true
         },
@@ -7323,6 +7482,10 @@
             "named": true
           },
           {
+            "type": "try_expression",
+            "named": true
+          },
+          {
             "type": "tuple_expression",
             "named": true
           },
@@ -7479,6 +7642,10 @@
             "named": true
           },
           {
+            "type": "try_expression",
+            "named": true
+          },
+          {
             "type": "tuple_expression",
             "named": true
           },
@@ -7616,6 +7783,10 @@
           },
           {
             "type": "record_expression",
+            "named": true
+          },
+          {
+            "type": "try_expression",
             "named": true
           },
           {
@@ -7760,6 +7931,10 @@
           },
           {
             "type": "record_expression",
+            "named": true
+          },
+          {
+            "type": "try_expression",
             "named": true
           },
           {
@@ -8132,6 +8307,10 @@
             "named": true
           },
           {
+            "type": "try_expression",
+            "named": true
+          },
+          {
             "type": "tuple_expression",
             "named": true
           },
@@ -8277,6 +8456,10 @@
           },
           {
             "type": "record_expression",
+            "named": true
+          },
+          {
+            "type": "try_expression",
             "named": true
           },
           {
@@ -8461,6 +8644,10 @@
           },
           {
             "type": "record_expression",
+            "named": true
+          },
+          {
+            "type": "try_expression",
             "named": true
           },
           {
@@ -8797,6 +8984,10 @@
             "named": true
           },
           {
+            "type": "try_expression",
+            "named": true
+          },
+          {
             "type": "tuple_expression",
             "named": true
           },
@@ -9062,6 +9253,10 @@
           "named": true
         },
         {
+          "type": "try_expression",
+          "named": true
+        },
+        {
           "type": "tuple_expression",
           "named": true
         },
@@ -9233,6 +9428,73 @@
     }
   },
   {
+    "type": "try_expression",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": false,
+      "required": true,
+      "types": [
+        {
+          "type": "call_expression",
+          "named": true
+        },
+        {
+          "type": "constructor",
+          "named": true
+        },
+        {
+          "type": "field_expression",
+          "named": true
+        },
+        {
+          "type": "hole_expression",
+          "named": true
+        },
+        {
+          "type": "identifier",
+          "named": true
+        },
+        {
+          "type": "index_expression",
+          "named": true
+        },
+        {
+          "type": "intrinsic_expression",
+          "named": true
+        },
+        {
+          "type": "list_expression",
+          "named": true
+        },
+        {
+          "type": "literal",
+          "named": true
+        },
+        {
+          "type": "parenthesized_expression",
+          "named": true
+        },
+        {
+          "type": "qualified_identifier",
+          "named": true
+        },
+        {
+          "type": "record_expression",
+          "named": true
+        },
+        {
+          "type": "tuple_expression",
+          "named": true
+        },
+        {
+          "type": "unit_expression",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
     "type": "tuple_expression",
     "named": true,
     "fields": {},
@@ -9361,6 +9623,10 @@
           "named": true
         },
         {
+          "type": "try_expression",
+          "named": true
+        },
+        {
           "type": "tuple_expression",
           "named": true
         },
@@ -9440,6 +9706,10 @@
         "types": [
           {
             "type": "dimensioned_type",
+            "named": true
+          },
+          {
+            "type": "effect_sum",
             "named": true
           },
           {
@@ -9916,6 +10186,10 @@
         }
       ]
     }
+  },
+  {
+    "type": "!",
+    "named": false
   },
   {
     "type": "!=",
