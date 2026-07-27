@@ -458,6 +458,7 @@ module.exports = grammar({
     _type_atom: $ => choice(
       $.generic_type,
       $.qualified_type,
+      $.tuple_type,
       $.type_identifier,
       $.lower_identifier,           // type variable
       $.list_type,
@@ -465,6 +466,15 @@ module.exports = grammar({
       $.dimensioned_type,
       $.type_hole,
     ),
+
+    // `(String, Bool)` — a tuple type. One element in parentheses is
+    // a grouped type, not a 1-tuple, so require at least two.
+    tuple_type: $ => prec(3, seq(
+      '(',
+      $._type,
+      repeat1(seq(',', $._type)),
+      ')',
+    )),
 
     // `bigint.BigInt` — a type named through its module.
     qualified_type: $ => prec(2, seq(
@@ -667,6 +677,7 @@ module.exports = grammar({
       field('effect', choice($.generic_type, $.type_identifier)),
       optional(field('arguments', $.arguments)),
       '{',
+      repeat($.let_statement),
       repeat1($.handle_clause),
       '}',
     ),
