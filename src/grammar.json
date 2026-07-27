@@ -3387,6 +3387,10 @@
         },
         {
           "type": "SYMBOL",
+          "name": "block_lambda"
+        },
+        {
+          "type": "SYMBOL",
           "name": "block"
         },
         {
@@ -3857,6 +3861,63 @@
         {
           "type": "STRING",
           "value": ")"
+        }
+      ]
+    },
+    "block_lambda": {
+      "type": "SEQ",
+      "members": [
+        {
+          "type": "STRING",
+          "value": "{"
+        },
+        {
+          "type": "SEQ",
+          "members": [
+            {
+              "type": "FIELD",
+              "name": "parameter",
+              "content": {
+                "type": "SYMBOL",
+                "name": "lower_identifier"
+              }
+            },
+            {
+              "type": "REPEAT",
+              "content": {
+                "type": "SEQ",
+                "members": [
+                  {
+                    "type": "STRING",
+                    "value": ","
+                  },
+                  {
+                    "type": "FIELD",
+                    "name": "parameter",
+                    "content": {
+                      "type": "SYMBOL",
+                      "name": "lower_identifier"
+                    }
+                  }
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "type": "STRING",
+          "value": "->"
+        },
+        {
+          "type": "REPEAT",
+          "content": {
+            "type": "SYMBOL",
+            "name": "_block_item"
+          }
+        },
+        {
+          "type": "STRING",
+          "value": "}"
         }
       ]
     },
@@ -5512,6 +5573,10 @@
     [
       "bind_pattern",
       "narrow_pattern"
+    ],
+    [
+      "block_lambda",
+      "record_field"
     ]
   ],
   "precedences": [],
