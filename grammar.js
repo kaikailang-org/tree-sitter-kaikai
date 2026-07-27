@@ -485,7 +485,7 @@ module.exports = grammar({
     dimensioned_type: $ => prec(2, seq(
       choice($.type_identifier, $.generic_type),
       '<',
-      sepBy1('+', $._unit_expr),
+      sepBy1(',', sepBy1('+', $._unit_expr)),
       '>',
     )),
 
