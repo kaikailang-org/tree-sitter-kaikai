@@ -194,7 +194,7 @@ module.exports = grammar({
 
     parameters: $ => seq(
       '(',
-      optional(sepBy1(',', $.parameter)),
+      optional(seq(sepBy1(',', $.parameter), optional(','))),
       ')',
     ),
 
@@ -868,7 +868,7 @@ module.exports = grammar({
 
     arguments: $ => seq(
       '(',
-      optional(sepBy1(',', $._expression)),
+      optional(seq(sepBy1(',', $._expression), optional(','))),
       ')',
     ),
 
