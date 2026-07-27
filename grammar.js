@@ -389,6 +389,7 @@ module.exports = grammar({
       optional(seq('over', field('domain', $.type_identifier))),
       'with',
       field('introducer', choice($.lower_identifier, $.type_identifier)),
+      optional(seq('{', repeat($.lower_identifier), '}')),
     ),
 
     // A theory is `theory Name = builtin` or `theory Name = { prop, ... }`.
@@ -501,6 +502,7 @@ module.exports = grammar({
     )),
 
     effect_label: $ => choice(
+      $.generic_type,
       $.type_identifier,
       $.lower_identifier,
     ),
@@ -929,7 +931,13 @@ module.exports = grammar({
       $.dimensioned_literal,
     ),
 
-    integer_literal: $ => token(/\d[\d_]*/),
+    // Decimal, hex and binary, with the optional width/carrier suffixes
+    // the lexer accepts (`42i32`, `200u8`, `19.99d`).
+    integer_literal: $ => token(choice(
+      /0[xX][0-9a-fA-F][0-9a-fA-F_]*(i32|u32|u64|i128|u8|d)?/,
+      /0[bB][01][01_]*(i32|u32|u64|i128|u8|d)?/,
+      /\d[\d_]*(i32|u32|u64|i128|u8|d)?/,
+    )),
 
     real_literal: $ => token(choice(
       /\d[\d_]*\.\d[\d_]*([eE][+-]?\d+)?/,
