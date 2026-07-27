@@ -486,7 +486,7 @@ module.exports = grammar({
     generic_type: $ => prec(1, seq(
       $.type_identifier,
       '[',
-      sepBy1(',', $._type),
+      sepBy1(',', choice($.effect_sum, $._type)),
       ']',
     )),
 
@@ -1003,7 +1003,7 @@ module.exports = grammar({
       token.immediate('"""'),
     ),
 
-    string_content: $ => token.immediate(prec(1, /([^"\\#\n]|#[^{"\\\n])+/)),
+    string_content: $ => token.immediate(prec(1, /([^"\\#\n]+|#[^{"\\\n])+#?/)),
 
     triple_string_content: $ => token.immediate(prec(1, /([^"#]|\\.|#[^{"]|"[^"]|""[^"])+/)),
 
