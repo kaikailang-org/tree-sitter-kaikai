@@ -5311,6 +5311,56 @@
     }
   },
   {
+    "type": "kind_declaration",
+    "named": true,
+    "fields": {
+      "domain": {
+        "multiple": false,
+        "required": false,
+        "types": [
+          {
+            "type": "type_identifier",
+            "named": true
+          }
+        ]
+      },
+      "introducer": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "lower_identifier",
+            "named": true
+          },
+          {
+            "type": "type_identifier",
+            "named": true
+          }
+        ]
+      },
+      "name": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "type_identifier",
+            "named": true
+          }
+        ]
+      },
+      "theory": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "type_identifier",
+            "named": true
+          }
+        ]
+      }
+    }
+  },
+  {
     "type": "lambda_expression",
     "named": true,
     "fields": {
@@ -9524,6 +9574,10 @@
           "named": true
         },
         {
+          "type": "kind_declaration",
+          "named": true
+        },
+        {
           "type": "protocol_declaration",
           "named": true
         },
@@ -10722,6 +10776,10 @@
     "named": false
   },
   {
+    "type": ";",
+    "named": false
+  },
+  {
     "type": "<",
     "named": false
   },
@@ -10874,6 +10932,10 @@
     "named": true
   },
   {
+    "type": "kind",
+    "named": false
+  },
+  {
     "type": "layout",
     "named": false
   },
@@ -10900,6 +10962,10 @@
   },
   {
     "type": "or",
+    "named": false
+  },
+  {
+    "type": "over",
     "named": false
   },
   {
