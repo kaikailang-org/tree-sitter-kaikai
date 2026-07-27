@@ -985,7 +985,6 @@ module.exports = grammar({
       '"""',
       repeat(choice(
         $.triple_string_content,
-        $.escape_sequence,
         $.interpolation,
       )),
       token.immediate('"""'),
@@ -993,9 +992,9 @@ module.exports = grammar({
 
     string_content: $ => token.immediate(prec(1, /([^"\\#\n]|#[^{"\\\n])+/)),
 
-    triple_string_content: $ => token.immediate(prec(1, /([^"\\#]|#[^{"\\]|"[^"]|""[^"])+/)),
+    triple_string_content: $ => token.immediate(prec(1, /([^"#]|\\.|#[^{"]|"[^"]|""[^"])+/)),
 
-    escape_sequence: $ => token.immediate(/\\([\\"'nrt0]|u\{[0-9a-fA-F]+\})/),
+    escape_sequence: $ => token.immediate(/\\([\\"'nrtbf0]|x[0-9a-fA-F]{2}|u\{[0-9a-fA-F]+\}|u[0-9a-fA-F]{4})/),
 
     interpolation: $ => seq(
       alias($._interpolation_start, '#{'),

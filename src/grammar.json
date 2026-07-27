@@ -5711,10 +5711,6 @@
               },
               {
                 "type": "SYMBOL",
-                "name": "escape_sequence"
-              },
-              {
-                "type": "SYMBOL",
                 "name": "interpolation"
               }
             ]
@@ -5747,7 +5743,7 @@
         "value": 1,
         "content": {
           "type": "PATTERN",
-          "value": "([^\"\\\\#]|#[^{\"\\\\]|\"[^\"]|\"\"[^\"])+"
+          "value": "([^\"#]|\\\\.|#[^{\"]|\"[^\"]|\"\"[^\"])+"
         }
       }
     },
@@ -5755,7 +5751,7 @@
       "type": "IMMEDIATE_TOKEN",
       "content": {
         "type": "PATTERN",
-        "value": "\\\\([\\\\\"'nrt0]|u\\{[0-9a-fA-F]+\\})"
+        "value": "\\\\([\\\\\"'nrtbf0]|x[0-9a-fA-F]{2}|u\\{[0-9a-fA-F]+\\}|u[0-9a-fA-F]{4})"
       }
     },
     "interpolation": {
