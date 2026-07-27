@@ -333,74 +333,19 @@
           "type": "CHOICE",
           "members": [
             {
-              "type": "CHOICE",
+              "type": "SEQ",
               "members": [
                 {
-                  "type": "SEQ",
-                  "members": [
-                    {
-                      "type": "STRING",
-                      "value": "as"
-                    },
-                    {
-                      "type": "FIELD",
-                      "name": "alias",
-                      "content": {
-                        "type": "SYMBOL",
-                        "name": "lower_identifier"
-                      }
-                    }
-                  ]
+                  "type": "STRING",
+                  "value": "as"
                 },
                 {
-                  "type": "SEQ",
-                  "members": [
-                    {
-                      "type": "STRING",
-                      "value": "."
-                    },
-                    {
-                      "type": "STRING",
-                      "value": "{"
-                    },
-                    {
-                      "type": "SEQ",
-                      "members": [
-                        {
-                          "type": "FIELD",
-                          "name": "name",
-                          "content": {
-                            "type": "SYMBOL",
-                            "name": "use_name"
-                          }
-                        },
-                        {
-                          "type": "REPEAT",
-                          "content": {
-                            "type": "SEQ",
-                            "members": [
-                              {
-                                "type": "STRING",
-                                "value": ","
-                              },
-                              {
-                                "type": "FIELD",
-                                "name": "name",
-                                "content": {
-                                  "type": "SYMBOL",
-                                  "name": "use_name"
-                                }
-                              }
-                            ]
-                          }
-                        }
-                      ]
-                    },
-                    {
-                      "type": "STRING",
-                      "value": "}"
-                    }
-                  ]
+                  "type": "FIELD",
+                  "name": "alias",
+                  "content": {
+                    "type": "SYMBOL",
+                    "name": "lower_identifier"
+                  }
                 }
               ]
             },

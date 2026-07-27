@@ -111,10 +111,7 @@ module.exports = grammar({
     import_declaration: $ => seq(
       'import',
       field('path', $.module_path),
-      optional(choice(
-        seq('as', field('alias', $.lower_identifier)),
-        seq('.', '{', sepBy1(',', field('name', $.use_name)), '}'),
-      )),
+      optional(seq('as', field('alias', $.lower_identifier))),
     ),
 
     use_declaration: $ => seq(

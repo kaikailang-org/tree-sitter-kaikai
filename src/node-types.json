@@ -4430,16 +4430,6 @@
           }
         ]
       },
-      "name": {
-        "multiple": true,
-        "required": false,
-        "types": [
-          {
-            "type": "use_name",
-            "named": true
-          }
-        ]
-      },
       "path": {
         "multiple": false,
         "required": true,
