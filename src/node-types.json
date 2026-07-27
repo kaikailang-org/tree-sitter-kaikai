@@ -6983,7 +6983,7 @@
         ]
       },
       "pattern": {
-        "multiple": false,
+        "multiple": true,
         "required": true,
         "types": [
           {
@@ -7043,7 +7043,7 @@
     "named": true,
     "fields": {
       "scrutinee": {
-        "multiple": false,
+        "multiple": true,
         "required": true,
         "types": [
           {

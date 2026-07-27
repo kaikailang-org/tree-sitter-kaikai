@@ -635,16 +635,18 @@ module.exports = grammar({
       optional(seq('else', field('else', choice($.if_expression, $.block)))),
     )),
 
+    // `match a, b { P, Q -> ... }` — several scrutinees, matched
+    // position by position against a comma-separated pattern list.
     match_expression: $ => seq(
       'match',
-      field('scrutinee', $._expression),
+      sepBy1(',', field('scrutinee', $._expression)),
       '{',
       repeat1($.match_arm),
       '}',
     ),
 
     match_arm: $ => prec.right(seq(
-      field('pattern', $._pattern),
+      sepBy1(',', field('pattern', $._pattern)),
       optional(seq('if', field('guard', $._expression))),
       '->',
       field('body', $._expression),
