@@ -433,6 +433,7 @@ module.exports = grammar({
 
     _type_atom: $ => choice(
       $.generic_type,
+      $.qualified_type,
       $.type_identifier,
       $.lower_identifier,           // type variable
       $.list_type,
@@ -440,6 +441,13 @@ module.exports = grammar({
       $.dimensioned_type,
       $.type_hole,
     ),
+
+    // `bigint.BigInt` — a type named through its module.
+    qualified_type: $ => prec(2, seq(
+      $.lower_identifier,
+      '.',
+      $.type_identifier,
+    )),
 
     generic_type: $ => prec(1, seq(
       $.type_identifier,
@@ -451,9 +459,9 @@ module.exports = grammar({
     list_type: $ => seq('[', $._type, ']'),
 
     dimensioned_type: $ => prec(2, seq(
-      $.type_identifier,
+      choice($.type_identifier, $.generic_type),
       '<',
-      $._unit_expr,
+      sepBy1('+', $._unit_expr),
       '>',
     )),
 

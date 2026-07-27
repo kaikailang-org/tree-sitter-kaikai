@@ -547,6 +547,10 @@
             "named": true
           },
           {
+            "type": "qualified_type",
+            "named": true
+          },
+          {
             "type": "record_type",
             "named": true
           },
@@ -1079,6 +1083,10 @@
           },
           {
             "type": "lower_identifier",
+            "named": true
+          },
+          {
+            "type": "qualified_type",
             "named": true
           },
           {
@@ -2414,6 +2422,10 @@
             "named": true
           },
           {
+            "type": "qualified_type",
+            "named": true
+          },
+          {
             "type": "record_type",
             "named": true
           },
@@ -3092,6 +3104,10 @@
       "required": true,
       "types": [
         {
+          "type": "generic_type",
+          "named": true
+        },
+        {
           "type": "type_identifier",
           "named": true
         },
@@ -3209,6 +3225,10 @@
           },
           {
             "type": "lower_identifier",
+            "named": true
+          },
+          {
+            "type": "qualified_type",
             "named": true
           },
           {
@@ -3333,6 +3353,10 @@
           },
           {
             "type": "lower_identifier",
+            "named": true
+          },
+          {
+            "type": "qualified_type",
             "named": true
           },
           {
@@ -3862,6 +3886,10 @@
             "named": true
           },
           {
+            "type": "qualified_type",
+            "named": true
+          },
+          {
             "type": "record_type",
             "named": true
           },
@@ -3951,6 +3979,10 @@
           "named": true
         },
         {
+          "type": "qualified_type",
+          "named": true
+        },
+        {
           "type": "record_type",
           "named": true
         },
@@ -3991,6 +4023,10 @@
         },
         {
           "type": "lower_identifier",
+          "named": true
+        },
+        {
+          "type": "qualified_type",
           "named": true
         },
         {
@@ -4444,6 +4480,10 @@
             "named": true
           },
           {
+            "type": "qualified_type",
+            "named": true
+          },
+          {
             "type": "record_type",
             "named": true
           },
@@ -4494,6 +4534,10 @@
         },
         {
           "type": "lower_identifier",
+          "named": true
+        },
+        {
+          "type": "qualified_type",
           "named": true
         },
         {
@@ -5256,6 +5300,10 @@
             "named": true
           },
           {
+            "type": "qualified_type",
+            "named": true
+          },
+          {
             "type": "record_type",
             "named": true
           },
@@ -5489,6 +5537,10 @@
           },
           {
             "type": "lower_identifier",
+            "named": true
+          },
+          {
+            "type": "qualified_type",
             "named": true
           },
           {
@@ -5877,6 +5929,10 @@
         },
         {
           "type": "lower_identifier",
+          "named": true
+        },
+        {
+          "type": "qualified_type",
           "named": true
         },
         {
@@ -6798,6 +6854,10 @@
           "named": true
         },
         {
+          "type": "qualified_type",
+          "named": true
+        },
+        {
           "type": "record_type",
           "named": true
         },
@@ -7137,6 +7197,10 @@
             "named": true
           },
           {
+            "type": "qualified_type",
+            "named": true
+          },
+          {
             "type": "record_type",
             "named": true
           },
@@ -7336,6 +7400,10 @@
         },
         {
           "type": "lower_identifier",
+          "named": true
+        },
+        {
+          "type": "qualified_type",
           "named": true
         },
         {
@@ -8035,6 +8103,10 @@
           },
           {
             "type": "lower_identifier",
+            "named": true
+          },
+          {
+            "type": "qualified_type",
             "named": true
           },
           {
@@ -8812,6 +8884,10 @@
             "named": true
           },
           {
+            "type": "qualified_type",
+            "named": true
+          },
+          {
             "type": "record_type",
             "named": true
           },
@@ -9016,6 +9092,10 @@
         },
         {
           "type": "lower_identifier",
+          "named": true
+        },
+        {
+          "type": "qualified_type",
           "named": true
         },
         {
@@ -9729,6 +9809,10 @@
             "named": true
           },
           {
+            "type": "qualified_type",
+            "named": true
+          },
+          {
             "type": "record_type",
             "named": true
           },
@@ -10155,6 +10239,10 @@
         },
         {
           "type": "lower_identifier",
+          "named": true
+        },
+        {
+          "type": "qualified_type",
           "named": true
         },
         {
