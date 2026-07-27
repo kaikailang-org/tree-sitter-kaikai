@@ -945,6 +945,18 @@
       "type": "SEQ",
       "members": [
         {
+          "type": "CHOICE",
+          "members": [
+            {
+              "type": "STRING",
+              "value": "^"
+            },
+            {
+              "type": "BLANK"
+            }
+          ]
+        },
+        {
           "type": "FIELD",
           "name": "name",
           "content": {
@@ -1154,6 +1166,10 @@
       "members": [
         {
           "type": "SYMBOL",
+          "name": "effect_sum"
+        },
+        {
+          "type": "SYMBOL",
           "name": "sum_type"
         },
         {
@@ -1251,6 +1267,35 @@
                     "type": "SYMBOL",
                     "name": "variant_payload"
                   }
+                }
+              ]
+            }
+          }
+        ]
+      }
+    },
+    "effect_sum": {
+      "type": "PREC_LEFT",
+      "value": 0,
+      "content": {
+        "type": "SEQ",
+        "members": [
+          {
+            "type": "SYMBOL",
+            "name": "type_identifier"
+          },
+          {
+            "type": "REPEAT1",
+            "content": {
+              "type": "SEQ",
+              "members": [
+                {
+                  "type": "STRING",
+                  "value": "+"
+                },
+                {
+                  "type": "SYMBOL",
+                  "name": "type_identifier"
                 }
               ]
             }
@@ -4400,8 +4445,29 @@
         {
           "type": "SYMBOL",
           "name": "deref_expression"
+        },
+        {
+          "type": "SYMBOL",
+          "name": "try_expression"
         }
       ]
+    },
+    "try_expression": {
+      "type": "PREC",
+      "value": 13,
+      "content": {
+        "type": "SEQ",
+        "members": [
+          {
+            "type": "SYMBOL",
+            "name": "_primary_expression"
+          },
+          {
+            "type": "STRING",
+            "value": "!"
+          }
+        ]
+      }
     },
     "negation_expression": {
       "type": "PREC",

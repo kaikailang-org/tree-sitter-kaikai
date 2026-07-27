@@ -191,6 +191,7 @@ module.exports = grammar({
     ),
 
     parameter: $ => seq(
+      optional('^'),
       field('name', $.lower_identifier),
       optional(seq(':', field('type', $._type))),
     ),
@@ -223,6 +224,7 @@ module.exports = grammar({
     ),
 
     _type_body: $ => choice(
+      $.effect_sum,
       $.sum_type,
       prec(2, $.record_type),
       $.refined_type,
@@ -235,6 +237,12 @@ module.exports = grammar({
       seq(optional('|'), $.variant, repeat1(seq('|', $.variant))),
       seq('|', $.variant),
       prec(3, seq(field('name', $.type_identifier), field('payload', $.variant_payload))),
+    )),
+
+    // `type Console = Stdout + Stderr + Stdin` — an effect-set alias.
+    effect_sum: $ => prec.left(seq(
+      $.type_identifier,
+      repeat1(seq('+', $.type_identifier)),
     )),
 
     variant: $ => seq(
@@ -753,7 +761,11 @@ module.exports = grammar({
       $.negation_expression,
       $.not_expression,
       $.deref_expression,
+      $.try_expression,
     ),
+
+    // `f(x)!` — propagate the error arm of a Result.
+    try_expression: $ => prec(PREC.apply, seq($._primary_expression, '!')),
 
     negation_expression: $ => prec(PREC.unary, seq('-', $._expression)),
     not_expression: $ => prec(PREC.not, seq('not', $._expression)),
