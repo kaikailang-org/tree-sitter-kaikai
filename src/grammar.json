@@ -3714,12 +3714,37 @@
           "value": "match"
         },
         {
-          "type": "FIELD",
-          "name": "scrutinee",
-          "content": {
-            "type": "SYMBOL",
-            "name": "_expression"
-          }
+          "type": "SEQ",
+          "members": [
+            {
+              "type": "FIELD",
+              "name": "scrutinee",
+              "content": {
+                "type": "SYMBOL",
+                "name": "_expression"
+              }
+            },
+            {
+              "type": "REPEAT",
+              "content": {
+                "type": "SEQ",
+                "members": [
+                  {
+                    "type": "STRING",
+                    "value": ","
+                  },
+                  {
+                    "type": "FIELD",
+                    "name": "scrutinee",
+                    "content": {
+                      "type": "SYMBOL",
+                      "name": "_expression"
+                    }
+                  }
+                ]
+              }
+            }
+          ]
         },
         {
           "type": "STRING",
@@ -3745,12 +3770,37 @@
         "type": "SEQ",
         "members": [
           {
-            "type": "FIELD",
-            "name": "pattern",
-            "content": {
-              "type": "SYMBOL",
-              "name": "_pattern"
-            }
+            "type": "SEQ",
+            "members": [
+              {
+                "type": "FIELD",
+                "name": "pattern",
+                "content": {
+                  "type": "SYMBOL",
+                  "name": "_pattern"
+                }
+              },
+              {
+                "type": "REPEAT",
+                "content": {
+                  "type": "SEQ",
+                  "members": [
+                    {
+                      "type": "STRING",
+                      "value": ","
+                    },
+                    {
+                      "type": "FIELD",
+                      "name": "pattern",
+                      "content": {
+                        "type": "SYMBOL",
+                        "name": "_pattern"
+                      }
+                    }
+                  ]
+                }
+              }
+            ]
           },
           {
             "type": "CHOICE",
