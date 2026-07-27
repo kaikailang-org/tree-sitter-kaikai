@@ -58,8 +58,11 @@ module.exports = grammar({
       $.impl_declaration,
       $.unit_declaration,
       $.test_declaration,
+      $.bench_declaration,
+      $.check_declaration,
+      $.theory_declaration,
       $.axiom_declaration,
-      $.derive_attribute,
+      $.attribute,
     ),
 
     extern_declaration: $ => seq(
@@ -78,16 +81,28 @@ module.exports = grammar({
     // ---------------------------------------------------------------
     // Comments
     // ---------------------------------------------------------------
-    line_comment: $ => token(seq('#', /[^\n]*/)),
+    // `#[` opens an attribute, so a comment is `#` followed by anything else.
+    line_comment: $ => token(seq('#', /[^\[\n][^\n]*|/)),
 
     // ---------------------------------------------------------------
     // Attributes
     // ---------------------------------------------------------------
-    derive_attribute: $ => seq(
-      '#derive',
-      '(',
-      sepBy1(',', field('trait', $.type_identifier)),
-      ')',
+    // `#[name]`, `#[name(args)]`. Unknown attribute names parse cleanly —
+    // the compiler drops them for forward compatibility.
+    attribute: $ => seq(
+      '#[',
+      field('name', $.lower_identifier),
+      optional(seq(
+        '(',
+        optional(sepBy1(',', field('argument', choice(
+          $.string_literal,
+          $.triple_string_literal,
+          $.type_identifier,
+          $.lower_identifier,
+        )))),
+        ')',
+      )),
+      ']',
     ),
 
     // ---------------------------------------------------------------
@@ -129,11 +144,32 @@ module.exports = grammar({
       optional(seq(':', field('return_type', $._type))),
       optional(field('row', $.effect_row)),
       optional(seq('where', sepBy1(',', $.where_clause))),
+      repeat(field('contract', $.contract_clause)),
       field('body', choice(
         seq('=', $._expression),
+        $.case_block,
         $.block,
       )),
     ),
+
+    contract_clause: $ => seq(
+      choice('requires', 'ensures'),
+      field('predicate', $._expression),
+    ),
+
+    case_block: $ => seq(
+      '{',
+      repeat1($.case_arm),
+      '}',
+    ),
+
+    case_arm: $ => prec.right(seq(
+      'case',
+      field('pattern', sepBy1(',', $._pattern)),
+      optional(seq('when', field('guard', $._expression))),
+      '->',
+      field('body', $._expression),
+    )),
 
     type_parameters: $ => seq(
       '[',
@@ -216,6 +252,7 @@ module.exports = grammar({
     ),
 
     record_type_field: $ => seq(
+      optional('priv'),
       field('name', $.lower_identifier),
       ':',
       field('type', $._type),
@@ -228,14 +265,34 @@ module.exports = grammar({
       optional(field('type_parameters', $.type_parameters)),
       '{',
       repeat($.effect_operation),
+      optional($.default_block),
       '}',
     ),
 
     effect_operation: $ => seq(
       field('name', $.lower_identifier),
+      optional(field('type_parameters', $.type_parameters)),
       $.parameters,
       ':',
       field('return_type', $._type),
+    ),
+
+    // `default { op(args, resume) -> expr, ... }` — the effect's
+    // built-in handler. `default` is not a keyword.
+    default_block: $ => seq(
+      'default',
+      '{',
+      repeat($.default_clause),
+      '}',
+    ),
+
+    default_clause: $ => seq(
+      field('operation', $.lower_identifier),
+      '(',
+      optional(sepBy1(',', field('parameter', $.lower_identifier))),
+      ')',
+      '->',
+      field('body', $._expression),
     ),
 
     protocol_declaration: $ => seq(
@@ -277,16 +334,44 @@ module.exports = grammar({
       '}',
     ),
 
+    // The unit name is any identifier — `unit m`, not just `unit Metre`.
+    // With `=` the unit aliases a measure expression.
     unit_declaration: $ => seq(
       optional('pub'),
       'unit',
-      field('name', $.type_identifier),
+      field('name', choice($.lower_identifier, $.type_identifier)),
+      optional(seq('=', field('alias', $._unit_expr))),
     ),
 
     test_declaration: $ => seq(
       'test',
       field('label', $.string_literal),
       field('body', $.block),
+    ),
+
+    bench_declaration: $ => seq(
+      'bench',
+      field('label', $.string_literal),
+      field('body', $.block),
+    ),
+
+    check_declaration: $ => seq(
+      'check',
+      field('label', $.string_literal),
+      optional(seq('with', sepBy1(',', field('parameter', $.parameter)))),
+      field('body', $.block),
+    ),
+
+    // A theory is `theory Name = builtin` or `theory Name = { prop, ... }`.
+    // `pub` is rejected by the compiler.
+    theory_declaration: $ => seq(
+      'theory',
+      field('name', $.type_identifier),
+      '=',
+      field('body', choice(
+        'builtin',
+        seq('{', sepBy1(',', field('property', $.lower_identifier)), '}'),
+      )),
     ),
 
     axiom_declaration: $ => seq(
@@ -668,6 +753,16 @@ module.exports = grammar({
       $.record_expression,
       $.parenthesized_expression,
       $.hole_expression,
+      $.intrinsic_expression,
+    ),
+
+    // `$extern_handler("sym")` — compiler intrinsic.
+    intrinsic_expression: $ => seq(
+      '$',
+      field('name', $.lower_identifier),
+      '(',
+      optional(sepBy1(',', $._expression)),
+      ')',
     ),
 
     unit_expression: $ => prec(2, seq('(', ')')),
