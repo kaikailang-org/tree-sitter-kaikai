@@ -4845,6 +4845,16 @@
           }
         ]
       },
+      "name": {
+        "multiple": true,
+        "required": false,
+        "types": [
+          {
+            "type": "use_name",
+            "named": true
+          }
+        ]
+      },
       "path": {
         "multiple": false,
         "required": true,
@@ -5344,7 +5354,7 @@
       },
       "introducer": {
         "multiple": false,
-        "required": true,
+        "required": false,
         "types": [
           {
             "type": "lower_identifier",
@@ -10789,6 +10799,10 @@
   },
   {
     "type": "..=",
+    "named": false
+  },
+  {
+    "type": ".{",
     "named": false
   },
   {

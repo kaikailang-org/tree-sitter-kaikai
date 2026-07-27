@@ -113,8 +113,14 @@ module.exports = grammar({
     import_declaration: $ => seq(
       'import',
       field('path', $.module_path),
-      optional(seq('as', field('alias', $.lower_identifier))),
+      optional(choice(
+        seq('as', field('alias', $.lower_identifier)),
+        seq($._dot_brace, sepBy1(',', field('name', $.use_name)), '}'),
+      )),
     ),
+
+    // One token, so module_path cannot claim the dot on its own.
+    _dot_brace: $ => token('.{'),
 
     use_declaration: $ => seq(
       'use',
@@ -387,9 +393,11 @@ module.exports = grammar({
       ':',
       field('theory', $.type_identifier),
       optional(seq('over', field('domain', $.type_identifier))),
-      'with',
-      field('introducer', choice($.lower_identifier, $.type_identifier)),
-      optional(seq('{', repeat($.lower_identifier), '}')),
+      optional(seq(
+        'with',
+        field('introducer', choice($.lower_identifier, $.type_identifier)),
+        optional(seq('{', repeat($.lower_identifier), '}')),
+      )),
     ),
 
     // A theory is `theory Name = builtin` or `theory Name = { prop, ... }`.
