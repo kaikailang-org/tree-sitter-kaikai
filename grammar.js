@@ -39,6 +39,7 @@ module.exports = grammar({
     [$.parameter, $.identifier],
     [$.record_field, $.identifier],
     [$.bind_pattern, $.narrow_pattern],
+    [$.block_lambda, $.record_field],
   ],
 
   externals: $ => [],
@@ -596,6 +597,7 @@ module.exports = grammar({
       $.handle_expression,
       $.for_expression,
       $.lambda_expression,
+      $.block_lambda,
       $.block,
       $._binary_expression,
       $._unary_expression,
@@ -672,6 +674,16 @@ module.exports = grammar({
       '(',
       optional(sepBy1(',', $.parameter)),
       ')',
+    ),
+
+    // `{ n -> body }`. Ambiguous with a record shorthand (`{ a, b }`)
+    // until the `->` shows up, hence the declared conflict.
+    block_lambda: $ => seq(
+      '{',
+      sepBy1(',', field('parameter', $.lower_identifier)),
+      '->',
+      repeat($._block_item),
+      '}',
     ),
 
     block: $ => seq(
