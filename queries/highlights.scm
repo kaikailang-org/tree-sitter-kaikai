@@ -6,7 +6,7 @@
 (line_comment) @comment
 
 ; Attributes
-(derive_attribute) @attribute
+(attribute) @attribute
 
 ; Keywords
 [
@@ -14,9 +14,13 @@
   "as"
   "assert"
   "axiom"
+  "bench"
+  "case"
+  "check"
   "const"
   "effect"
   "else"
+  "ensures"
   "fn"
   "for"
   "handle"
@@ -28,13 +32,17 @@
   "match"
   "not"
   "or"
+  "priv"
   "protocol"
   "pub"
+  "requires"
   "test"
+  "theory"
   "type"
   "unit"
   "use"
   "var"
+  "when"
   "where"
   "with"
   "extern"
