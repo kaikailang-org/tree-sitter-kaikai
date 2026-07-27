@@ -3417,6 +3417,10 @@
       "required": true,
       "types": [
         {
+          "type": "generic_type",
+          "named": true
+        },
+        {
           "type": "lower_identifier",
           "named": true
         },
@@ -5358,6 +5362,16 @@
           }
         ]
       }
+    },
+    "children": {
+      "multiple": true,
+      "required": false,
+      "types": [
+        {
+          "type": "lower_identifier",
+          "named": true
+        }
+      ]
     }
   },
   {
