@@ -25,6 +25,10 @@
           "named": true
         },
         {
+          "type": "block_call",
+          "named": true
+        },
+        {
           "type": "block_lambda",
           "named": true
         },
@@ -169,6 +173,10 @@
           },
           {
             "type": "block",
+            "named": true
+          },
+          {
+            "type": "block_call",
             "named": true
           },
           {
@@ -337,6 +345,10 @@
           },
           {
             "type": "block",
+            "named": true
+          },
+          {
+            "type": "block_call",
             "named": true
           },
           {
@@ -597,6 +609,10 @@
             "named": true
           },
           {
+            "type": "block_call",
+            "named": true
+          },
+          {
             "type": "block_lambda",
             "named": true
           },
@@ -742,6 +758,10 @@
         },
         {
           "type": "block",
+          "named": true
+        },
+        {
+          "type": "block_call",
           "named": true
         },
         {
@@ -907,6 +927,10 @@
           },
           {
             "type": "block",
+            "named": true
+          },
+          {
+            "type": "block_call",
             "named": true
           },
           {
@@ -1207,6 +1231,10 @@
           "named": true
         },
         {
+          "type": "block_call",
+          "named": true
+        },
+        {
           "type": "block_lambda",
           "named": true
         },
@@ -1338,6 +1366,88 @@
     }
   },
   {
+    "type": "block_call",
+    "named": true,
+    "fields": {
+      "function": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "block_call",
+            "named": true
+          },
+          {
+            "type": "call_expression",
+            "named": true
+          },
+          {
+            "type": "constructor",
+            "named": true
+          },
+          {
+            "type": "field_expression",
+            "named": true
+          },
+          {
+            "type": "hole_expression",
+            "named": true
+          },
+          {
+            "type": "identifier",
+            "named": true
+          },
+          {
+            "type": "index_expression",
+            "named": true
+          },
+          {
+            "type": "intrinsic_expression",
+            "named": true
+          },
+          {
+            "type": "list_expression",
+            "named": true
+          },
+          {
+            "type": "literal",
+            "named": true
+          },
+          {
+            "type": "parenthesized_expression",
+            "named": true
+          },
+          {
+            "type": "qualified_identifier",
+            "named": true
+          },
+          {
+            "type": "record_expression",
+            "named": true
+          },
+          {
+            "type": "tuple_expression",
+            "named": true
+          },
+          {
+            "type": "unit_expression",
+            "named": true
+          }
+        ]
+      },
+      "trailing_block": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "trailing_block",
+            "named": true
+          }
+        ]
+      }
+    }
+  },
+  {
     "type": "block_lambda",
     "named": true,
     "fields": {
@@ -1374,6 +1484,10 @@
         },
         {
           "type": "block",
+          "named": true
+        },
+        {
+          "type": "block_call",
           "named": true
         },
         {
@@ -1531,6 +1645,10 @@
         "required": true,
         "types": [
           {
+            "type": "block_call",
+            "named": true
+          },
+          {
             "type": "call_expression",
             "named": true
           },
@@ -1587,6 +1705,16 @@
             "named": true
           }
         ]
+      },
+      "trailing_block": {
+        "multiple": false,
+        "required": false,
+        "types": [
+          {
+            "type": "trailing_block",
+            "named": true
+          }
+        ]
       }
     }
   },
@@ -1608,6 +1736,10 @@
           },
           {
             "type": "block",
+            "named": true
+          },
+          {
+            "type": "block_call",
             "named": true
           },
           {
@@ -1750,6 +1882,10 @@
           },
           {
             "type": "block",
+            "named": true
+          },
+          {
+            "type": "block_call",
             "named": true
           },
           {
@@ -2010,6 +2146,10 @@
             "named": true
           },
           {
+            "type": "block_call",
+            "named": true
+          },
+          {
             "type": "block_lambda",
             "named": true
           },
@@ -2182,6 +2322,10 @@
             "named": true
           },
           {
+            "type": "block_call",
+            "named": true
+          },
+          {
             "type": "block_lambda",
             "named": true
           },
@@ -2327,6 +2471,10 @@
           },
           {
             "type": "block",
+            "named": true
+          },
+          {
+            "type": "block_call",
             "named": true
           },
           {
@@ -2479,6 +2627,10 @@
           },
           {
             "type": "block",
+            "named": true
+          },
+          {
+            "type": "block_call",
             "named": true
           },
           {
@@ -2690,6 +2842,10 @@
             "named": true
           },
           {
+            "type": "block_call",
+            "named": true
+          },
+          {
             "type": "block_lambda",
             "named": true
           },
@@ -2853,6 +3009,10 @@
             "named": true
           },
           {
+            "type": "block_call",
+            "named": true
+          },
+          {
             "type": "block_lambda",
             "named": true
           },
@@ -3013,6 +3173,10 @@
           },
           {
             "type": "block",
+            "named": true
+          },
+          {
+            "type": "block_call",
             "named": true
           },
           {
@@ -3181,6 +3345,10 @@
         },
         {
           "type": "block",
+          "named": true
+        },
+        {
+          "type": "block_call",
           "named": true
         },
         {
@@ -3676,6 +3844,10 @@
         "required": true,
         "types": [
           {
+            "type": "block_call",
+            "named": true
+          },
+          {
             "type": "call_expression",
             "named": true
           },
@@ -3763,6 +3935,10 @@
           },
           {
             "type": "block",
+            "named": true
+          },
+          {
+            "type": "block_call",
             "named": true
           },
           {
@@ -3969,6 +4145,10 @@
           },
           {
             "type": "block",
+            "named": true
+          },
+          {
+            "type": "block_call",
             "named": true
           },
           {
@@ -4351,6 +4531,10 @@
             "named": true
           },
           {
+            "type": "block_call",
+            "named": true
+          },
+          {
             "type": "block_lambda",
             "named": true
           },
@@ -4599,6 +4783,10 @@
           },
           {
             "type": "block",
+            "named": true
+          },
+          {
+            "type": "block_call",
             "named": true
           },
           {
@@ -4936,6 +5124,10 @@
             "named": true
           },
           {
+            "type": "block_call",
+            "named": true
+          },
+          {
             "type": "block_lambda",
             "named": true
           },
@@ -5102,6 +5294,10 @@
           "named": true
         },
         {
+          "type": "block_call",
+          "named": true
+        },
+        {
           "type": "block_lambda",
           "named": true
         },
@@ -5257,6 +5453,10 @@
         },
         {
           "type": "block",
+          "named": true
+        },
+        {
+          "type": "block_call",
           "named": true
         },
         {
@@ -5464,6 +5664,10 @@
           },
           {
             "type": "block",
+            "named": true
+          },
+          {
+            "type": "block_call",
             "named": true
           },
           {
@@ -5744,6 +5948,10 @@
             "named": true
           },
           {
+            "type": "block_call",
+            "named": true
+          },
+          {
             "type": "block_lambda",
             "named": true
           },
@@ -5992,6 +6200,10 @@
             "named": true
           },
           {
+            "type": "block_call",
+            "named": true
+          },
+          {
             "type": "block_lambda",
             "named": true
           },
@@ -6137,6 +6349,10 @@
         },
         {
           "type": "block",
+          "named": true
+        },
+        {
+          "type": "block_call",
           "named": true
         },
         {
@@ -6471,6 +6687,10 @@
             "named": true
           },
           {
+            "type": "block_call",
+            "named": true
+          },
+          {
             "type": "block_lambda",
             "named": true
           },
@@ -6627,6 +6847,10 @@
             "named": true
           },
           {
+            "type": "block_call",
+            "named": true
+          },
+          {
             "type": "block_lambda",
             "named": true
           },
@@ -6775,6 +6999,10 @@
             "named": true
           },
           {
+            "type": "block_call",
+            "named": true
+          },
+          {
             "type": "block_lambda",
             "named": true
           },
@@ -6914,6 +7142,10 @@
           },
           {
             "type": "block",
+            "named": true
+          },
+          {
+            "type": "block_call",
             "named": true
           },
           {
@@ -7116,6 +7348,10 @@
           },
           {
             "type": "block",
+            "named": true
+          },
+          {
+            "type": "block_call",
             "named": true
           },
           {
@@ -7347,6 +7583,10 @@
           "named": true
         },
         {
+          "type": "block_call",
+          "named": true
+        },
+        {
           "type": "block_lambda",
           "named": true
         },
@@ -7491,6 +7731,10 @@
         },
         {
           "type": "block",
+          "named": true
+        },
+        {
+          "type": "block_call",
           "named": true
         },
         {
@@ -7718,6 +7962,10 @@
           "named": true
         },
         {
+          "type": "block_call",
+          "named": true
+        },
+        {
           "type": "block_lambda",
           "named": true
         },
@@ -7916,6 +8164,10 @@
             "named": true
           },
           {
+            "type": "block_call",
+            "named": true
+          },
+          {
             "type": "block_lambda",
             "named": true
           },
@@ -8080,6 +8332,10 @@
             "named": true
           },
           {
+            "type": "block_call",
+            "named": true
+          },
+          {
             "type": "block_lambda",
             "named": true
           },
@@ -8225,6 +8481,10 @@
           },
           {
             "type": "block",
+            "named": true
+          },
+          {
+            "type": "block_call",
             "named": true
           },
           {
@@ -8377,6 +8637,10 @@
           },
           {
             "type": "block",
+            "named": true
+          },
+          {
+            "type": "block_call",
             "named": true
           },
           {
@@ -8765,6 +9029,10 @@
             "named": true
           },
           {
+            "type": "block_call",
+            "named": true
+          },
+          {
             "type": "block_lambda",
             "named": true
           },
@@ -8918,6 +9186,10 @@
           },
           {
             "type": "block",
+            "named": true
+          },
+          {
+            "type": "block_call",
             "named": true
           },
           {
@@ -9110,6 +9382,10 @@
           },
           {
             "type": "block",
+            "named": true
+          },
+          {
+            "type": "block_call",
             "named": true
           },
           {
@@ -9462,6 +9738,10 @@
             "named": true
           },
           {
+            "type": "block_call",
+            "named": true
+          },
+          {
             "type": "block_lambda",
             "named": true
           },
@@ -9747,6 +10027,10 @@
           "named": true
         },
         {
+          "type": "block_call",
+          "named": true
+        },
+        {
           "type": "block_lambda",
           "named": true
         },
@@ -10011,6 +10295,180 @@
     }
   },
   {
+    "type": "trailing_block",
+    "named": true,
+    "fields": {
+      "parameter": {
+        "multiple": true,
+        "required": true,
+        "types": [
+          {
+            "type": "lower_identifier",
+            "named": true
+          }
+        ]
+      }
+    },
+    "children": {
+      "multiple": true,
+      "required": false,
+      "types": [
+        {
+          "type": "arithmetic_expression",
+          "named": true
+        },
+        {
+          "type": "ascription_expression",
+          "named": true
+        },
+        {
+          "type": "assert_statement",
+          "named": true
+        },
+        {
+          "type": "assignment_statement",
+          "named": true
+        },
+        {
+          "type": "block",
+          "named": true
+        },
+        {
+          "type": "block_call",
+          "named": true
+        },
+        {
+          "type": "block_lambda",
+          "named": true
+        },
+        {
+          "type": "call_expression",
+          "named": true
+        },
+        {
+          "type": "comparison_expression",
+          "named": true
+        },
+        {
+          "type": "concat_expression",
+          "named": true
+        },
+        {
+          "type": "constructor",
+          "named": true
+        },
+        {
+          "type": "deref_expression",
+          "named": true
+        },
+        {
+          "type": "field_expression",
+          "named": true
+        },
+        {
+          "type": "for_expression",
+          "named": true
+        },
+        {
+          "type": "handle_expression",
+          "named": true
+        },
+        {
+          "type": "hole_expression",
+          "named": true
+        },
+        {
+          "type": "identifier",
+          "named": true
+        },
+        {
+          "type": "if_expression",
+          "named": true
+        },
+        {
+          "type": "index_expression",
+          "named": true
+        },
+        {
+          "type": "intrinsic_expression",
+          "named": true
+        },
+        {
+          "type": "lambda_expression",
+          "named": true
+        },
+        {
+          "type": "let_expression",
+          "named": true
+        },
+        {
+          "type": "let_statement",
+          "named": true
+        },
+        {
+          "type": "list_expression",
+          "named": true
+        },
+        {
+          "type": "literal",
+          "named": true
+        },
+        {
+          "type": "logical_expression",
+          "named": true
+        },
+        {
+          "type": "match_expression",
+          "named": true
+        },
+        {
+          "type": "negation_expression",
+          "named": true
+        },
+        {
+          "type": "not_expression",
+          "named": true
+        },
+        {
+          "type": "parenthesized_expression",
+          "named": true
+        },
+        {
+          "type": "pipe_expression",
+          "named": true
+        },
+        {
+          "type": "power_expression",
+          "named": true
+        },
+        {
+          "type": "qualified_identifier",
+          "named": true
+        },
+        {
+          "type": "range_expression",
+          "named": true
+        },
+        {
+          "type": "record_expression",
+          "named": true
+        },
+        {
+          "type": "try_expression",
+          "named": true
+        },
+        {
+          "type": "tuple_expression",
+          "named": true
+        },
+        {
+          "type": "unit_expression",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
     "type": "triple_string_literal",
     "named": true,
     "fields": {},
@@ -10037,6 +10495,10 @@
       "multiple": false,
       "required": true,
       "types": [
+        {
+          "type": "block_call",
+          "named": true
+        },
         {
           "type": "call_expression",
           "named": true
@@ -10114,6 +10576,10 @@
         },
         {
           "type": "block",
+          "named": true
+        },
+        {
+          "type": "block_call",
           "named": true
         },
         {

@@ -40,9 +40,10 @@ module.exports = grammar({
     [$.record_field, $.identifier],
     [$.bind_pattern, $.narrow_pattern],
     [$.block_lambda, $.record_field],
+    [$.call_expression],
   ],
 
-  externals: $ => [],
+  externals: $ => [$._trailing_block_brace],
 
   rules: {
     source_file: $ => repeat($._top_level),
@@ -835,6 +836,7 @@ module.exports = grammar({
     // Primary expressions --------------------------------------------
     _primary_expression: $ => choice(
       $.call_expression,
+      $.block_call,
       $.index_expression,
       $.field_expression,
       $.qualified_identifier,
@@ -864,6 +866,24 @@ module.exports = grammar({
     call_expression: $ => prec(PREC.apply, seq(
       field('function', $._primary_expression),
       field('arguments', $.arguments),
+      optional(field('trailing_block', $.trailing_block)),
+    )),
+
+    // `f(x) { a, b -> ... }` and `f { a -> ... }`. The opening brace is
+    // an external token, which is what separates it from a record or
+    // from the body of an enclosing match.
+    trailing_block: $ => seq(
+      $._trailing_block_brace,
+      sepBy1(',', field('parameter', $.lower_identifier)),
+      '->',
+      repeat($._block_item),
+      '}',
+    ),
+
+    // A callee with no argument list: `nursery { n -> ... }`.
+    block_call: $ => prec(PREC.apply, seq(
+      field('function', $._primary_expression),
+      field('trailing_block', $.trailing_block),
     )),
 
     arguments: $ => seq(
