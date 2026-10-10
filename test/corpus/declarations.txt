@@ -101,3 +101,301 @@ type Person = { name: String, age: Int }
     body: (record_type
       (record_type_field name: (lower_identifier) type: (type_identifier))
       (record_type_field name: (lower_identifier) type: (type_identifier)))))
+
+==================
+Extern declarations
+==================
+
+extern "C"("cos") pub fn trig(x: Real) : Real / Ffi
+extern "C" type Pt = { x: F32, y: F32 }
+extern "C" opaque Handle
+
+---
+
+(source_file
+  (extern_declaration
+    abi: (string_literal
+      (string_content))
+    symbol: (string_literal
+      (string_content))
+    name: (lower_identifier)
+    parameters: (parameters
+      (parameter
+        name: (lower_identifier)
+        type: (type_identifier)))
+    return_type: (type_identifier)
+    row: (effect_row
+      (effect_label
+        (type_identifier))))
+  (extern_declaration
+    abi: (string_literal
+      (string_content))
+    name: (type_identifier)
+    body: (record_type
+      (record_type_field
+        name: (lower_identifier)
+        type: (type_identifier))
+      (record_type_field
+        name: (lower_identifier)
+        type: (type_identifier))))
+  (extern_declaration
+    abi: (string_literal
+      (string_content))
+    name: (type_identifier)))
+
+==================
+Kinds and habitants
+==================
+
+pub kind Metric : AbelianGroup with metric
+kind Frame : Composition over Int with layout { be le }
+metric m
+unit Newton = kg * m / sec^2
+type Matrix[t]<m: Dim, n: Dim> = { cells: [t] }
+
+fn twice(x: Real<ua.tick>) : Real<m^-1> = x * 2.0<Frame.be>
+
+---
+
+(source_file
+  (kind_declaration
+    name: (type_identifier)
+    theory: (type_identifier)
+    introducer: (lower_identifier))
+  (kind_declaration
+    name: (type_identifier)
+    theory: (type_identifier)
+    domain: (type_identifier)
+    introducer: (lower_identifier)
+    (lower_identifier)
+    (lower_identifier))
+  (unit_declaration
+    introducer: (lower_identifier)
+    name: (lower_identifier))
+  (unit_declaration
+    name: (type_identifier)
+    alias: (unit_quotient
+      (unit_product
+        (unit_atom
+          (lower_identifier))
+        (unit_atom
+          (lower_identifier)))
+      (unit_power
+        (unit_atom
+          (lower_identifier))
+        (integer_literal))))
+  (type_declaration
+    name: (type_identifier)
+    type_parameters: (type_parameters
+      (type_parameter
+        (lower_identifier)))
+    habitant_slots: (habitant_slots
+      (habitant_slot
+        name: (lower_identifier)
+        kind: (type_identifier))
+      (habitant_slot
+        name: (lower_identifier)
+        kind: (type_identifier)))
+    body: (record_type
+      (record_type_field
+        name: (lower_identifier)
+        type: (list_type
+          (lower_identifier)))))
+  (function_declaration
+    name: (lower_identifier)
+    parameters: (parameters
+      (parameter
+        name: (lower_identifier)
+        type: (dimensioned_type
+          (type_identifier)
+          (unit_atom
+            (lower_identifier)
+            (lower_identifier)))))
+    return_type: (dimensioned_type
+      (type_identifier)
+      (unit_power
+        (unit_atom
+          (lower_identifier))
+        (integer_literal)))
+    body: (arithmetic_expression
+      left: (identifier
+        (lower_identifier))
+      right: (literal
+        (dimensioned_literal
+          (real_literal)
+          (unit_atom
+            (type_identifier)
+            (lower_identifier)))))))
+
+==================
+Attributes
+==================
+
+#[doc("Reads the `#{...}` slots.")]
+#[derive(Eq, Show)]
+type User = {
+  #[json(rename = "user_name")]
+  name: String,
+  priv age: Int,
+}
+
+---
+
+(source_file
+  (attribute
+    name: (lower_identifier)
+    argument: (string_literal))
+  (attribute
+    name: (lower_identifier)
+    argument: (type_identifier)
+    argument: (type_identifier))
+  (type_declaration
+    name: (type_identifier)
+    body: (record_type
+      (record_type_field
+        (attribute
+          name: (lower_identifier)
+          argument: (attribute_pair
+            key: (lower_identifier)
+            value: (literal
+              (string_literal
+                (string_content)))))
+        name: (lower_identifier)
+        type: (type_identifier))
+      (record_type_field
+        name: (lower_identifier)
+        type: (type_identifier)))))
+
+==================
+Axioms and protocol laws
+==================
+
+axiom unsafe_cast[a, b](x: a) : b
+
+protocol Sequence[s: Shape] : Functorial {
+  first(xs: s[Int]) : Int
+}
+
+impl Sequence[Int] for Vec {
+  fn first(xs: Vec[Int]) : Int = 0
+}
+axiom Functorial
+
+---
+
+(source_file
+  (axiom_declaration
+    name: (lower_identifier)
+    type_parameters: (type_parameters
+      (type_parameter
+        (lower_identifier))
+      (type_parameter
+        (lower_identifier)))
+    parameters: (parameters
+      (parameter
+        name: (lower_identifier)
+        type: (lower_identifier)))
+    type: (lower_identifier))
+  (protocol_declaration
+    name: (type_identifier)
+    type_parameters: (type_parameters
+      (type_parameter
+        (lower_identifier)
+        (type_identifier)))
+    theory: (type_identifier)
+    (protocol_signature
+      name: (lower_identifier)
+      parameters: (parameters
+        (parameter
+          name: (lower_identifier)
+          type: (generic_type
+            (lower_identifier)
+            (type_identifier))))
+      return_type: (type_identifier)))
+  (impl_declaration
+    protocol: (type_identifier)
+    (type_identifier)
+    target: (type_identifier)
+    (function_declaration
+      name: (lower_identifier)
+      parameters: (parameters
+        (parameter
+          name: (lower_identifier)
+          type: (generic_type
+            (type_identifier)
+            (type_identifier))))
+      return_type: (type_identifier)
+      body: (literal
+        (integer_literal))))
+  (axiom_declaration
+    law: (type_identifier)))
+
+==================
+Imports
+==================
+
+import arith as A
+import collections.map.{get, put}
+import ?hole
+use Stdout
+
+---
+
+(source_file
+  (import_declaration
+    path: (module_path
+      (lower_identifier))
+    alias: (type_identifier))
+  (import_declaration
+    path: (module_path
+      (lower_identifier)
+      (lower_identifier))
+    name: (use_name
+      (lower_identifier))
+    name: (use_name
+      (lower_identifier)))
+  (import_declaration
+    path: (hole_expression))
+  (use_declaration
+    path: (module_path
+      (type_identifier))))
+
+==================
+Contracts and refinements
+==================
+
+type Positive = Int where > 0
+
+fn mydiv(a: Int, b: Int) : Int requires b != 0 { a / b }
+
+---
+
+(source_file
+  (type_declaration
+    name: (type_identifier)
+    body: (refined_type
+      (type_identifier)
+      predicate: (literal
+        (integer_literal))))
+  (function_declaration
+    name: (lower_identifier)
+    parameters: (parameters
+      (parameter
+        name: (lower_identifier)
+        type: (type_identifier))
+      (parameter
+        name: (lower_identifier)
+        type: (type_identifier)))
+    return_type: (type_identifier)
+    contract: (contract_clause
+      predicate: (comparison_expression
+        left: (identifier
+          (lower_identifier))
+        right: (literal
+          (integer_literal))))
+    body: (block
+      (arithmetic_expression
+        left: (identifier
+          (lower_identifier))
+        right: (identifier
+          (lower_identifier))))))

@@ -79,3 +79,208 @@ fn point_x(p: Point) : Int = match p {
           (record_pattern_field name: (lower_identifier)
             pattern: (wildcard_pattern)))
         body: (identifier (lower_identifier))))))
+
+==================
+As, narrow and range patterns
+==================
+
+fn f(v: U) : Int = match v {
+  whole as [h, ...] -> 1
+  p : Port -> 2
+  0..9 -> 3
+  -1 -> 4
+  _ -> 5
+}
+
+---
+
+(source_file
+  (function_declaration
+    name: (lower_identifier)
+    parameters: (parameters
+      (parameter
+        name: (lower_identifier)
+        type: (type_identifier)))
+    return_type: (type_identifier)
+    body: (match_expression
+      scrutinee: (identifier
+        (lower_identifier))
+      (match_arm
+        pattern: (as_pattern
+          name: (lower_identifier)
+          pattern: (list_pattern
+            (bind_pattern
+              (lower_identifier))
+            (rest_pattern)))
+        body: (literal
+          (integer_literal)))
+      (match_arm
+        pattern: (narrow_pattern
+          (lower_identifier)
+          (type_identifier))
+        body: (literal
+          (integer_literal)))
+      (match_arm
+        pattern: (range_pattern
+          start: (literal_pattern
+            (integer_literal))
+          end: (literal_pattern
+            (integer_literal)))
+        body: (literal
+          (integer_literal)))
+      (match_arm
+        pattern: (literal_pattern
+          (integer_literal))
+        body: (literal
+          (integer_literal)))
+      (match_arm
+        pattern: (wildcard_pattern)
+        body: (literal
+          (integer_literal))))))
+
+==================
+Tuple patterns on consecutive arms
+==================
+
+fn f(a: Bool, b: Bool) : Int = match (a, b) {
+  (false, true) -> g(a)
+  (_, _) -> 0
+}
+
+---
+
+(source_file
+  (function_declaration
+    name: (lower_identifier)
+    parameters: (parameters
+      (parameter
+        name: (lower_identifier)
+        type: (type_identifier))
+      (parameter
+        name: (lower_identifier)
+        type: (type_identifier)))
+    return_type: (type_identifier)
+    body: (match_expression
+      scrutinee: (tuple_expression
+        (identifier
+          (lower_identifier))
+        (identifier
+          (lower_identifier)))
+      (match_arm
+        pattern: (tuple_pattern
+          (literal_pattern
+            (bool_literal))
+          (literal_pattern
+            (bool_literal)))
+        body: (call_expression
+          function: (identifier
+            (lower_identifier))
+          arguments: (arguments
+            (identifier
+              (lower_identifier)))))
+      (match_arm
+        pattern: (tuple_pattern
+          (wildcard_pattern)
+          (wildcard_pattern))
+        body: (literal
+          (integer_literal))))))
+
+==================
+Qualified patterns
+==================
+
+fn f(c: ma.Cell) : Int = match c {
+  ma.Cell { lo: a, hi: b } -> a + b
+  ma.Empty -> 0
+  ma.Wrap(x) -> x
+}
+
+---
+
+(source_file
+  (function_declaration
+    name: (lower_identifier)
+    parameters: (parameters
+      (parameter
+        name: (lower_identifier)
+        type: (qualified_type
+          (lower_identifier)
+          (type_identifier))))
+    return_type: (type_identifier)
+    body: (match_expression
+      scrutinee: (identifier
+        (lower_identifier))
+      (match_arm
+        pattern: (record_pattern
+          type: (qualified_type
+            (lower_identifier)
+            (type_identifier))
+          (record_pattern_field
+            name: (lower_identifier)
+            pattern: (bind_pattern
+              (lower_identifier)))
+          (record_pattern_field
+            name: (lower_identifier)
+            pattern: (bind_pattern
+              (lower_identifier))))
+        body: (arithmetic_expression
+          left: (identifier
+            (lower_identifier))
+          right: (identifier
+            (lower_identifier))))
+      (match_arm
+        pattern: (qualified_pattern
+          (lower_identifier)
+          (type_identifier))
+        body: (literal
+          (integer_literal)))
+      (match_arm
+        pattern: (qualified_pattern
+          (lower_identifier)
+          (type_identifier)
+          (bind_pattern
+            (lower_identifier)))
+        body: (identifier
+          (lower_identifier))))))
+
+==================
+Multiple scrutinees and guards
+==================
+
+fn f(a: Int, b: Int) : Int = match a, b { 0, n if n < 0 -> 1; _, _ -> 2 }
+
+---
+
+(source_file
+  (function_declaration
+    name: (lower_identifier)
+    parameters: (parameters
+      (parameter
+        name: (lower_identifier)
+        type: (type_identifier))
+      (parameter
+        name: (lower_identifier)
+        type: (type_identifier)))
+    return_type: (type_identifier)
+    body: (match_expression
+      scrutinee: (identifier
+        (lower_identifier))
+      scrutinee: (identifier
+        (lower_identifier))
+      (match_arm
+        pattern: (literal_pattern
+          (integer_literal))
+        pattern: (bind_pattern
+          (lower_identifier))
+        guard: (comparison_expression
+          left: (identifier
+            (lower_identifier))
+          right: (literal
+            (integer_literal)))
+        body: (literal
+          (integer_literal)))
+      (match_arm
+        pattern: (wildcard_pattern)
+        pattern: (wildcard_pattern)
+        body: (literal
+          (integer_literal))))))

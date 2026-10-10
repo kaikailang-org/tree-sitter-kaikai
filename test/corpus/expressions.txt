@@ -110,3 +110,514 @@ fn show(x: Int) : String = "x=#{x}"
       (string_literal
         (string_content)
         (interpolation (identifier (lower_identifier)))))))
+
+==================
+Trailing blocks
+==================
+
+fn main() : Unit / Spawn = with_mailbox {
+  let f = spawn.spawn(() => with_mailbox { worker(me) })
+  each(xs) { (n, s) -> n } { done() }
+  nursery { n -> n.spawn(f) }
+  foo
+  { 1 }
+}
+
+---
+
+(source_file
+  (function_declaration
+    name: (lower_identifier)
+    parameters: (parameters)
+    return_type: (type_identifier)
+    row: (effect_row
+      (effect_label
+        (type_identifier)))
+    body: (block_call
+      function: (identifier
+        (lower_identifier))
+      trailing_block: (trailing_block
+        (let_statement
+          pattern: (bind_pattern
+            (lower_identifier))
+          value: (call_expression
+            function: (field_expression
+              value: (identifier
+                (lower_identifier))
+              field: (lower_identifier))
+            arguments: (arguments
+              (lambda_expression
+                (lambda_params)
+                body: (block_call
+                  function: (identifier
+                    (lower_identifier))
+                  trailing_block: (trailing_block
+                    (call_expression
+                      function: (identifier
+                        (lower_identifier))
+                      arguments: (arguments
+                        (identifier
+                          (lower_identifier))))))))))
+        (call_expression
+          function: (identifier
+            (lower_identifier))
+          arguments: (arguments
+            (identifier
+              (lower_identifier)))
+          trailing_block: (trailing_block
+            pattern: (tuple_pattern
+              (bind_pattern
+                (lower_identifier))
+              (bind_pattern
+                (lower_identifier)))
+            (identifier
+              (lower_identifier)))
+          trailing_block: (trailing_block
+            (call_expression
+              function: (identifier
+                (lower_identifier))
+              arguments: (arguments))))
+        (block_call
+          function: (identifier
+            (lower_identifier))
+          trailing_block: (trailing_block
+            parameter: (lower_identifier)
+            (call_expression
+              function: (field_expression
+                value: (identifier
+                  (lower_identifier))
+                field: (lower_identifier))
+              arguments: (arguments
+                (identifier
+                  (lower_identifier))))))
+        (identifier
+          (lower_identifier))
+        (block
+          (literal
+            (integer_literal)))))))
+
+==================
+Block lambdas
+==================
+
+fn main() : Int {
+  let g = { x -> x * 2 }
+  let z = { -> 99 }
+  g(z())
+}
+
+---
+
+(source_file
+  (function_declaration
+    name: (lower_identifier)
+    parameters: (parameters)
+    return_type: (type_identifier)
+    body: (block
+      (let_statement
+        pattern: (bind_pattern
+          (lower_identifier))
+        value: (block_lambda
+          parameter: (lower_identifier)
+          (arithmetic_expression
+            left: (identifier
+              (lower_identifier))
+            right: (literal
+              (integer_literal)))))
+      (let_statement
+        pattern: (bind_pattern
+          (lower_identifier))
+        value: (block_lambda
+          (literal
+            (integer_literal))))
+      (call_expression
+        function: (identifier
+          (lower_identifier))
+        arguments: (arguments
+          (call_expression
+            function: (identifier
+              (lower_identifier))
+            arguments: (arguments)))))))
+
+==================
+Braces after a condition open the body
+==================
+
+fn main() : Int {
+  if id == Forest { 1 } else if ready { 2 } else { 3 }
+  match slot(ctx) { s -> s == 1 or i + 1 < n }
+}
+
+---
+
+(source_file
+  (function_declaration
+    name: (lower_identifier)
+    parameters: (parameters)
+    return_type: (type_identifier)
+    body: (block
+      (if_expression
+        condition: (comparison_expression
+          left: (identifier
+            (lower_identifier))
+          right: (constructor
+            (type_identifier)))
+        then: (block
+          (literal
+            (integer_literal)))
+        else: (if_expression
+          condition: (identifier
+            (lower_identifier))
+          then: (block
+            (literal
+              (integer_literal)))
+          else: (block
+            (literal
+              (integer_literal)))))
+      (match_expression
+        scrutinee: (call_expression
+          function: (identifier
+            (lower_identifier))
+          arguments: (arguments
+            (identifier
+              (lower_identifier))))
+        (match_arm
+          pattern: (bind_pattern
+            (lower_identifier))
+          body: (logical_expression
+            left: (comparison_expression
+              left: (identifier
+                (lower_identifier))
+              right: (literal
+                (integer_literal)))
+            right: (comparison_expression
+              left: (arithmetic_expression
+                left: (identifier
+                  (lower_identifier))
+                right: (literal
+                  (integer_literal)))
+              right: (identifier
+                (lower_identifier)))))))))
+
+==================
+Record literals
+==================
+
+fn main() : Unit {
+  let a = Point { x: 1, y: 2 }
+  let b = V3 { x, y: 7, z }
+  let c = W { 1, "x", true }
+  let d = proc.Spawn { ...proc.inherit(), err: "/dev/null" }
+  ()
+}
+
+---
+
+(source_file
+  (function_declaration
+    name: (lower_identifier)
+    parameters: (parameters)
+    return_type: (type_identifier)
+    body: (block
+      (let_statement
+        pattern: (bind_pattern
+          (lower_identifier))
+        value: (record_expression
+          type: (type_identifier)
+          (record_field
+            name: (lower_identifier)
+            value: (literal
+              (integer_literal)))
+          (record_field
+            name: (lower_identifier)
+            value: (literal
+              (integer_literal)))))
+      (let_statement
+        pattern: (bind_pattern
+          (lower_identifier))
+        value: (record_expression
+          type: (type_identifier)
+          (record_field
+            name: (lower_identifier))
+          (record_field
+            name: (lower_identifier)
+            value: (literal
+              (integer_literal)))
+          (record_field
+            name: (lower_identifier))))
+      (let_statement
+        pattern: (bind_pattern
+          (lower_identifier))
+        value: (record_expression
+          type: (type_identifier)
+          (literal
+            (integer_literal))
+          (literal
+            (string_literal
+              (string_content)))
+          (literal
+            (bool_literal))))
+      (let_statement
+        pattern: (bind_pattern
+          (lower_identifier))
+        value: (record_expression
+          type: (qualified_constructor
+            (identifier
+              (lower_identifier))
+            (type_identifier))
+          (spread_expression
+            (call_expression
+              function: (field_expression
+                value: (identifier
+                  (lower_identifier))
+                field: (lower_identifier))
+              arguments: (arguments)))
+          (record_field
+            name: (lower_identifier)
+            value: (literal
+              (string_literal
+                (string_content))))))
+      (unit_expression))))
+
+==================
+Collection literals
+==================
+
+fn main() : Unit {
+  let m = %{ "a": 1, ...base }
+  let s = %[ 1, 2, 3 ]
+  let r = [1..10]
+  ()
+}
+
+---
+
+(source_file
+  (function_declaration
+    name: (lower_identifier)
+    parameters: (parameters)
+    return_type: (type_identifier)
+    body: (block
+      (let_statement
+        pattern: (bind_pattern
+          (lower_identifier))
+        value: (map_expression
+          (map_entry
+            key: (literal
+              (string_literal
+                (string_content)))
+            value: (literal
+              (integer_literal)))
+          (spread_expression
+            (identifier
+              (lower_identifier)))))
+      (let_statement
+        pattern: (bind_pattern
+          (lower_identifier))
+        value: (set_expression
+          (literal
+            (integer_literal))
+          (literal
+            (integer_literal))
+          (literal
+            (integer_literal))))
+      (let_statement
+        pattern: (bind_pattern
+          (lower_identifier))
+        value: (list_expression
+          (range_expression
+            start: (literal
+              (integer_literal))
+            end: (literal
+              (integer_literal)))))
+      (unit_expression))))
+
+==================
+Lambda placeholders
+==================
+
+fn main() : [Int] = xs | .length() |? .starts_with("a") |> run(. * 2, _)
+
+---
+
+(source_file
+  (function_declaration
+    name: (lower_identifier)
+    parameters: (parameters)
+    return_type: (list_type
+      (type_identifier))
+    body: (pipe_expression
+      left: (pipe_expression
+        left: (pipe_expression
+          left: (identifier
+            (lower_identifier))
+          right: (call_expression
+            function: (section_expression
+              field: (lower_identifier))
+            arguments: (arguments)))
+        right: (call_expression
+          function: (section_expression
+            field: (lower_identifier))
+          arguments: (arguments
+            (literal
+              (string_literal
+                (string_content))))))
+      right: (call_expression
+        function: (identifier
+          (lower_identifier))
+        arguments: (arguments
+          (arithmetic_expression
+            left: (placeholder)
+            right: (literal
+              (integer_literal)))
+          (identifier
+            (lower_identifier)))))))
+
+==================
+Postfix forms
+==================
+
+fn main() : Unit {
+  get_array()[0] := 99
+  p.x := lookup(k)!.value
+  let c = shapes.Red
+  let t = (a, b)
+  (c, t)
+}
+
+---
+
+(source_file
+  (function_declaration
+    name: (lower_identifier)
+    parameters: (parameters)
+    return_type: (type_identifier)
+    body: (block
+      (assignment_statement
+        target: (index_expression
+          value: (call_expression
+            function: (identifier
+              (lower_identifier))
+            arguments: (arguments))
+          index: (literal
+            (integer_literal)))
+        value: (literal
+          (integer_literal)))
+      (assignment_statement
+        target: (field_expression
+          value: (identifier
+            (lower_identifier))
+          field: (lower_identifier))
+        value: (field_expression
+          value: (try_expression
+            (call_expression
+              function: (identifier
+                (lower_identifier))
+              arguments: (arguments
+                (identifier
+                  (lower_identifier)))))
+          field: (lower_identifier)))
+      (let_statement
+        pattern: (bind_pattern
+          (lower_identifier))
+        value: (qualified_constructor
+          (identifier
+            (lower_identifier))
+          (type_identifier)))
+      (let_statement
+        pattern: (bind_pattern
+          (lower_identifier))
+        value: (tuple_expression
+          (identifier
+            (lower_identifier))
+          (identifier
+            (lower_identifier))))
+      (tuple_expression
+        (identifier
+          (lower_identifier))
+        (identifier
+          (lower_identifier))))))
+
+==================
+Literals
+==================
+
+fn main() : Unit {
+  let a = "#"
+  let b = "#{src}/#{string.join(xs, ", ")}.kai"
+  let c = '\x0B'
+  let d = 100<USD> + 0xFFu8
+  let e = ~r/^[a-z]+$/i
+  let f = i + 1 < n
+  ()
+}
+
+---
+
+(source_file
+  (function_declaration
+    name: (lower_identifier)
+    parameters: (parameters)
+    return_type: (type_identifier)
+    body: (block
+      (let_statement
+        pattern: (bind_pattern
+          (lower_identifier))
+        value: (literal
+          (string_literal
+            (string_content))))
+      (let_statement
+        pattern: (bind_pattern
+          (lower_identifier))
+        value: (literal
+          (string_literal
+            (interpolation
+              (identifier
+                (lower_identifier)))
+            (string_content)
+            (interpolation
+              (call_expression
+                function: (field_expression
+                  value: (identifier
+                    (lower_identifier))
+                  field: (lower_identifier))
+                arguments: (arguments
+                  (identifier
+                    (lower_identifier))
+                  (literal
+                    (string_literal
+                      (string_content))))))
+            (string_content))))
+      (let_statement
+        pattern: (bind_pattern
+          (lower_identifier))
+        value: (literal
+          (char_literal)))
+      (let_statement
+        pattern: (bind_pattern
+          (lower_identifier))
+        value: (arithmetic_expression
+          left: (literal
+            (dimensioned_literal
+              (integer_literal)
+              (unit_atom
+                (type_identifier))))
+          right: (literal
+            (integer_literal))))
+      (let_statement
+        pattern: (bind_pattern
+          (lower_identifier))
+        value: (literal
+          (regex_literal)))
+      (let_statement
+        pattern: (bind_pattern
+          (lower_identifier))
+        value: (comparison_expression
+          left: (arithmetic_expression
+            left: (identifier
+              (lower_identifier))
+            right: (literal
+              (integer_literal)))
+          right: (identifier
+            (lower_identifier))))
+      (unit_expression))))

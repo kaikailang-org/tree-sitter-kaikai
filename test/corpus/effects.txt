@@ -111,3 +111,131 @@ impl Add for Int {
       body: (arithmetic_expression
         left: (identifier (lower_identifier))
         right: (identifier (lower_identifier))))))
+
+==================
+Handler state, alias and lifecycle clauses
+==================
+
+fn main() : Int / Stdout = handle { take(r) } with Res[Int](6) as r {
+  initially { 7 }
+  get(resume) -> resume(state)
+  put(s: String, resume) -> { Stdout.print(s); resume(()) }
+  finally { Stdout.print("bye") }
+}
+
+---
+
+(source_file
+  (function_declaration
+    name: (lower_identifier)
+    parameters: (parameters)
+    return_type: (type_identifier)
+    row: (effect_row
+      (effect_label
+        (type_identifier)))
+    body: (handle_expression
+      body: (block
+        (call_expression
+          function: (identifier
+            (lower_identifier))
+          arguments: (arguments
+            (identifier
+              (lower_identifier)))))
+      effect: (generic_type
+        (type_identifier)
+        (type_identifier))
+      arguments: (arguments
+        (literal
+          (integer_literal)))
+      alias: (lower_identifier)
+      (lifecycle_clause
+        body: (block
+          (literal
+            (integer_literal))))
+      (handle_clause
+        name: (lower_identifier)
+        (lower_identifier)
+        body: (call_expression
+          function: (identifier
+            (lower_identifier))
+          arguments: (arguments
+            (identifier
+              (lower_identifier)))))
+      (handle_clause
+        name: (lower_identifier)
+        (parameter
+          name: (lower_identifier)
+          type: (type_identifier))
+        (lower_identifier)
+        body: (block
+          (call_expression
+            function: (qualified_identifier
+              (type_identifier)
+              (lower_identifier))
+            arguments: (arguments
+              (identifier
+                (lower_identifier))))
+          (call_expression
+            function: (identifier
+              (lower_identifier))
+            arguments: (arguments
+              (unit_expression)))))
+      (lifecycle_clause
+        body: (block
+          (call_expression
+            function: (qualified_identifier
+              (type_identifier)
+              (lower_identifier))
+            arguments: (arguments
+              (literal
+                (string_literal
+                  (string_content))))))))))
+
+==================
+Qualified effects and row arguments
+==================
+
+fn go() : Unit / ea.Emit = ea.Emit.put("x")
+
+fn produce() : Stream[Int, Fail + r] / ?e = todo!("later")
+
+---
+
+(source_file
+  (function_declaration
+    name: (lower_identifier)
+    parameters: (parameters)
+    return_type: (type_identifier)
+    row: (effect_row
+      (effect_label
+        (qualified_type
+          (lower_identifier)
+          (type_identifier))))
+    body: (call_expression
+      function: (field_expression
+        value: (qualified_constructor
+          (identifier
+            (lower_identifier))
+          (type_identifier))
+        field: (lower_identifier))
+      arguments: (arguments
+        (literal
+          (string_literal
+            (string_content))))))
+  (function_declaration
+    name: (lower_identifier)
+    parameters: (parameters)
+    return_type: (generic_type
+      (type_identifier)
+      (type_identifier)
+      (effect_sum
+        (type_identifier)
+        (lower_identifier)))
+    row: (effect_row
+      (effect_label
+        (type_hole)))
+    body: (todo_expression
+      (arguments
+        (literal
+          (string_literal
+            (string_content)))))))
