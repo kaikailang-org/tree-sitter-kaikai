@@ -1,6 +1,6 @@
 {
   "name": "tree-sitter-kaikai",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "Tree-sitter grammar for the kaikai programming language",
   "main": "bindings/node",
   "types": "bindings/node",
