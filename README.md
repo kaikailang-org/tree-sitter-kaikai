@@ -5,24 +5,36 @@ A [tree-sitter](https://tree-sitter.github.io/) grammar for the
 
 kaikai is a statically-typed functional language with algebraic effects
 as a primitive and Elixir-style pipelines. This grammar tracks the
-surface syntax accepted by `stage2/compiler.kai` in the upstream
-repository.
+surface syntax accepted by `stage2/compiler/parse.kai` in the upstream
+repository, as of kaikai 0.139.
 
 ## Features
 
 - Full coverage of declarations: `fn`, `const`, `type` (sum/record),
-  `effect`, `protocol`, `impl`, `unit`, `test`, `axiom`, `import`,
-  `use`, `extern`.
-- Expressions: `if`, `match`, `let`, `handle ... with`, `for ... in`,
-  lambdas, pipes (`|>`, `|`, `||`, `|?`), arithmetic, comparison,
-  logical, range, concatenation, ascription.
-- Patterns: literal, wildcard, bind, variant, record, list with
-  rest, narrow (`x : T`), `as`-binding.
-- Type syntax: generics, function arrows, lists, records, dimensioned
-  types (`Real<USD>`, `Real<m/s^2>`), effect rows (`T / Io + Fail`).
+  `effect`, `protocol`, `impl`, `kind`, `theory`, `unit` and
+  user-declared habitant introducers, `test`, `bench`, `check`,
+  `axiom`, `import`, `use`, `extern "C"` (functions, struct types and
+  opaque handles).
+- Expressions: `if`, `match`, `handle ... with` (state, alias,
+  `initially`/`finally`), lambdas, block lambdas and trailing blocks
+  (`spawn { ... }`, `each(xs) { x -> ... }`), pipes (`|>`, `|`, `||`,
+  `|?`), lambda placeholders (`f(. + 1)`, `xs | .length`), record,
+  list, map (`%{ }`) and set (`%[ ]`) literals, postfix `!`.
+- Patterns: literal, range, wildcard, bind, variant, record, list
+  with rest, tuple, narrow (`x : T`), `as`-binding, module-qualified
+  constructors.
+- Type syntax: generics, function arrows, lists, tuples, records,
+  refinements (`Int where > 0`), dimensioned types (`Real<USD>`,
+  `Real<m/s^2>`), effect rows (`T / Io + Fail`).
 - String interpolation `"x=#{expr}"`, triple-quoted strings, char
-  literals, unit-of-measure number literals.
-- `#derive(...)` attributes.
+  literals, regex literals (`~r/.../`), unit-of-measure number
+  literals.
+- `#[derive(...)]`, `#[doc(...)]` and other attributes.
+
+kaikai ends statements at newlines. The grammar treats newlines as
+whitespace and an external scanner (`src/scanner.c`) recovers the
+places where they matter: which `{` opens a body, a trailing block or
+a block lambda.
 
 ## Installation
 
@@ -36,7 +48,7 @@ local parser_config = require("nvim-treesitter.parsers").get_parser_configs()
 parser_config.kaikai = {
   install_info = {
     url = "https://github.com/kaikailang-org/tree-sitter-kaikai",
-    files = { "src/parser.c" },
+    files = { "src/parser.c", "src/scanner.c" },
     branch = "main",
     generate_requires_npm = false,
     requires_generate_from_grammar = false,
@@ -97,10 +109,11 @@ npx tree-sitter parse examples/quicksort.kai
 
 ## Status
 
-Alpha — covers the syntax accepted by the upstream kaikai compiler at
-the time of writing. Edge cases around `case`-block multi-clause
-function bodies, refinement-type predicates inside patterns, and a few
-sugar forms may not parse yet; PRs welcome.
+Alpha — parses every well-formed `.kai` file in the upstream
+repository (stdlib, compiler, examples and demos) at kaikai 0.139.3.
+Naming rules the compiler checks after parsing are applied here while
+parsing: an uppercase parameter or record field, or a lowercase effect
+name, is a syntax error.
 
 ## License
 

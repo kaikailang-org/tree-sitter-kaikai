@@ -2,6 +2,11 @@
 
 [
   (block)
+  (case_block)
+  (block_lambda)
+  (trailing_block)
+  (map_expression)
+  (set_expression)
   (record_type)
   (record_expression)
   (list_expression)

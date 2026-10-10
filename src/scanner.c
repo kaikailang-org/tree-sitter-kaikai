@@ -1,20 +1,25 @@
 #include "tree_sitter/parser.h"
 
-// Decides whether a `{` opens a call's trailing block.
+// kaikai ends a statement at a newline, and the grammar treats newlines
+// as whitespace. This scanner recovers the few decisions that depend on
+// them, all of which the compiler makes with one token of context:
 //
-// Three things can follow a callee: a record literal (`{ a: 1 }`), the
-// body of an enclosing match/if/for (`match f(x) { P -> ... }`), and the
-// call's own trailing block (`nursery { n -> ... }`). Only the last one
-// may produce this token.
-//
-// The shape that identifies a trailing block is narrow: the brace is
-// followed either by `ident, ident, ... ->` (its parameter list) or by
-// something that cannot open a match arm at all. A match arm's pattern
-// is a constructor, a literal, a list or a tuple — never a bare
-// identifier list followed by an arrow, because that is what a lambda
-// header looks like.
+//  - The `{` after an `if` condition or a `match` scrutinee opens the
+//    body. A trailing block or a record literal cannot end either one,
+//    so whenever a body may start here, it does.
+//  - A `{` on the same line as a callee is that call's trailing block
+//    (`spawn { ... }`, `each(xs) { x -> ... }`). On a later line it
+//    starts a statement of its own.
+//  - A `{` followed by `params ->` is a block lambda.
+//  - A `-` that leads a line starts an expression or a pattern; it does
+//    not continue the previous line as a subtraction.
 enum TokenType {
-  TRAILING_BLOCK_BRACE,
+  BODY_BRACE,
+  TRAILING_BRACE,
+  TRAILING_LAMBDA_BRACE,
+  LAMBDA_BRACE,
+  LINE_MINUS,
+  ERROR_SENTINEL,
 };
 
 void *tree_sitter_kaikai_external_scanner_create(void) { return NULL; }
@@ -31,16 +36,15 @@ static bool is_ident_char(int32_t c) {
          (c >= '0' && c <= '9') || c == '_';
 }
 
-static void skip_ws(TSLexer *lexer) {
+// Skips blanks and comments while looking ahead past a token.
+static void skip_trivia(TSLexer *lexer) {
   for (;;) {
     int32_t c = lexer->lookahead;
     if (c == ' ' || c == '\t' || c == '\n' || c == '\r') {
-      lexer->advance(lexer, true);
+      lexer->advance(lexer, false);
     } else if (c == '#') {
-      lexer->advance(lexer, true);
-      if (lexer->lookahead == '[') return;   // an attribute, not a comment
       while (lexer->lookahead != '\n' && !lexer->eof(lexer)) {
-        lexer->advance(lexer, true);
+        lexer->advance(lexer, false);
       }
     } else {
       return;
@@ -48,41 +52,93 @@ static void skip_ws(TSLexer *lexer) {
   }
 }
 
+static bool at_arrow(TSLexer *lexer) {
+  if (lexer->lookahead != '-') return false;
+  lexer->advance(lexer, false);
+  return lexer->lookahead == '>';
+}
+
+// True when what follows an opening brace is a lambda header: `->`,
+// `a, b ->` or one parenthesised pattern and `->`.
+static bool at_lambda_header(TSLexer *lexer) {
+  skip_trivia(lexer);
+
+  if (lexer->lookahead == '-') return at_arrow(lexer);
+
+  if (lexer->lookahead == '(') {
+    int depth = 0;
+    for (;;) {
+      int32_t c = lexer->lookahead;
+      if (lexer->eof(lexer) || c == '{' || c == '}' || c == '"') return false;
+      if (c == '(') depth++;
+      if (c == ')') depth--;
+      lexer->advance(lexer, false);
+      if (depth == 0) break;
+    }
+    skip_trivia(lexer);
+    return at_arrow(lexer);
+  }
+
+  if (!is_ident_start(lexer->lookahead)) return false;
+  for (;;) {
+    while (is_ident_char(lexer->lookahead)) lexer->advance(lexer, false);
+    skip_trivia(lexer);
+    if (lexer->lookahead != ',') return at_arrow(lexer);
+    lexer->advance(lexer, false);
+    skip_trivia(lexer);
+    if (!is_ident_start(lexer->lookahead)) return false;
+  }
+}
+
 bool tree_sitter_kaikai_external_scanner_scan(void *payload, TSLexer *lexer,
                                               const bool *valid_symbols) {
-  if (!valid_symbols[TRAILING_BLOCK_BRACE]) return false;
+  // Every symbol is valid during error recovery; guessing there only
+  // makes the recovery worse.
+  if (valid_symbols[ERROR_SENTINEL]) return false;
 
-  skip_ws(lexer);
+  bool newline = false;
+  for (;;) {
+    int32_t c = lexer->lookahead;
+    if (c == '\n') newline = true;
+    if (c != ' ' && c != '\t' && c != '\n' && c != '\r') break;
+    lexer->advance(lexer, true);
+  }
+
+  if (lexer->lookahead == '-') {
+    if (!newline || !valid_symbols[LINE_MINUS]) return false;
+    lexer->advance(lexer, false);
+    if (lexer->lookahead == '>') return false;
+    lexer->mark_end(lexer);
+    lexer->result_symbol = LINE_MINUS;
+    return true;
+  }
+
   if (lexer->lookahead != '{') return false;
-
   lexer->advance(lexer, false);
   lexer->mark_end(lexer);   // the token is the brace and nothing more
 
-  skip_ws(lexer);
-
-  // Only the parameterised form is claimed here: `{ a, b -> ... }`.
-  // A block with no parameters is indistinguishable from a match body
-  // by lookahead alone, so it is left to the ordinary `{` rule.
-  if (!is_ident_start(lexer->lookahead)) return false;
-
-  for (;;) {
-    while (is_ident_char(lexer->lookahead)) lexer->advance(lexer, false);
-    skip_ws(lexer);
-
-    if (lexer->lookahead == ',') {
-      lexer->advance(lexer, false);
-      skip_ws(lexer);
-      if (!is_ident_start(lexer->lookahead)) return false;
-      continue;
-    }
-
-    if (lexer->lookahead == '-') {
-      lexer->advance(lexer, false);
-      if (lexer->lookahead == '>') {
-        lexer->result_symbol = TRAILING_BLOCK_BRACE;
-        return true;
-      }
-    }
-    return false;
+  if (valid_symbols[BODY_BRACE]) {
+    lexer->result_symbol = BODY_BRACE;
+    return true;
   }
+
+  bool lambda = at_lambda_header(lexer);
+
+  if (!newline) {
+    if (lambda && valid_symbols[TRAILING_LAMBDA_BRACE]) {
+      lexer->result_symbol = TRAILING_LAMBDA_BRACE;
+      return true;
+    }
+    if (!lambda && valid_symbols[TRAILING_BRACE]) {
+      lexer->result_symbol = TRAILING_BRACE;
+      return true;
+    }
+  }
+
+  if (lambda && valid_symbols[LAMBDA_BRACE]) {
+    lexer->result_symbol = LAMBDA_BRACE;
+    return true;
+  }
+
+  return false;
 }
