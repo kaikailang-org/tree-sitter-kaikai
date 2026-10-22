@@ -399,3 +399,56 @@ fn mydiv(a: Int, b: Int) : Int requires b != 0 { a / b }
           (lower_identifier))
         right: (identifier
           (lower_identifier))))))
+
+==================
+Package-scoped visibility
+==================
+
+pub(pkg) fn helper(x: Int) : Int = x
+pub(pkg) type Id = Int
+pub type Name = String
+
+---
+
+(source_file
+  (function_declaration
+    name: (lower_identifier)
+    parameters: (parameters
+      (parameter
+        name: (lower_identifier)
+        type: (type_identifier)))
+    return_type: (type_identifier)
+    body: (identifier
+      (lower_identifier)))
+  (type_declaration
+    name: (type_identifier)
+    body: (type_identifier))
+  (type_declaration
+    name: (type_identifier)
+    body: (type_identifier)))
+
+==================
+Exported foreign type heads
+==================
+
+extern "C" pub opaque Sha
+extern "C" pub type Pt = { x: I32, y: I32 }
+
+---
+
+(source_file
+  (extern_declaration
+    abi: (string_literal
+      (string_content))
+    name: (type_identifier))
+  (extern_declaration
+    abi: (string_literal
+      (string_content))
+    name: (type_identifier)
+    body: (record_type
+      (record_type_field
+        name: (lower_identifier)
+        type: (type_identifier))
+      (record_type_field
+        name: (lower_identifier)
+        type: (type_identifier)))))

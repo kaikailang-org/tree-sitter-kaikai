@@ -621,3 +621,169 @@ fn main() : Unit {
           right: (identifier
             (lower_identifier))))
       (unit_expression))))
+
+==================
+Coalesce and pipe-each
+==================
+
+fn main() : Unit / Stdout = {
+  let a = env.get("PATH") ?? ""
+  let b = x ?? y ?? 0
+  let c = n ?? 0 == 1
+  xs | show |! Stdout.print
+}
+
+---
+
+(source_file
+  (function_declaration
+    name: (lower_identifier)
+    parameters: (parameters)
+    return_type: (type_identifier)
+    row: (effect_row
+      (effect_label
+        (type_identifier)))
+    body: (block
+      (let_statement
+        pattern: (bind_pattern
+          (lower_identifier))
+        value: (coalesce_expression
+          left: (call_expression
+            function: (field_expression
+              value: (identifier
+                (lower_identifier))
+              field: (lower_identifier))
+            arguments: (arguments
+              (literal
+                (string_literal
+                  (string_content)))))
+          right: (literal
+            (string_literal))))
+      (let_statement
+        pattern: (bind_pattern
+          (lower_identifier))
+        value: (coalesce_expression
+          left: (identifier
+            (lower_identifier))
+          right: (coalesce_expression
+            left: (identifier
+              (lower_identifier))
+            right: (literal
+              (integer_literal)))))
+      (let_statement
+        pattern: (bind_pattern
+          (lower_identifier))
+        value: (comparison_expression
+          left: (coalesce_expression
+            left: (identifier
+              (lower_identifier))
+            right: (literal
+              (integer_literal)))
+          right: (literal
+            (integer_literal))))
+      (pipe_expression
+        left: (pipe_expression
+          left: (identifier
+            (lower_identifier))
+          right: (identifier
+            (lower_identifier)))
+        right: (qualified_identifier
+          (type_identifier)
+          (lower_identifier))))))
+
+==================
+Lazy sequence literals
+==================
+
+fn main() : Unit = {
+  let a = lazy []
+  let b = lazy [2..]
+  let c = lazy [0, 5..]
+  let d = lazy [1, ...rest]
+}
+
+---
+
+(source_file
+  (function_declaration
+    name: (lower_identifier)
+    parameters: (parameters)
+    return_type: (type_identifier)
+    body: (block
+      (let_statement
+        pattern: (bind_pattern
+          (lower_identifier))
+        value: (lazy_expression))
+      (let_statement
+        pattern: (bind_pattern
+          (lower_identifier))
+        value: (lazy_expression
+          (open_range_expression
+            start: (literal
+              (integer_literal)))))
+      (let_statement
+        pattern: (bind_pattern
+          (lower_identifier))
+        value: (lazy_expression
+          (literal
+            (integer_literal))
+          (open_range_expression
+            start: (literal
+              (integer_literal)))))
+      (let_statement
+        pattern: (bind_pattern
+          (lower_identifier))
+        value: (lazy_expression
+          (literal
+            (integer_literal))
+          (spread_expression
+            (identifier
+              (lower_identifier))))))))
+
+==================
+Interpolation format specs
+==================
+
+fn main() : Unit / Stdout = {
+  Stdout.print("[#{n:05}][#{s:<6}][#{r:8.2}][#{x:.2}]")
+}
+
+---
+
+(source_file
+  (function_declaration
+    name: (lower_identifier)
+    parameters: (parameters)
+    return_type: (type_identifier)
+    row: (effect_row
+      (effect_label
+        (type_identifier)))
+    body: (block
+      (call_expression
+        function: (qualified_identifier
+          (type_identifier)
+          (lower_identifier))
+        arguments: (arguments
+          (literal
+            (string_literal
+              (string_content)
+              (interpolation
+                (identifier
+                  (lower_identifier))
+                format: (format_spec))
+              (string_content)
+              (interpolation
+                (identifier
+                  (lower_identifier))
+                format: (format_spec))
+              (string_content)
+              (interpolation
+                (identifier
+                  (lower_identifier))
+                format: (format_spec))
+              (string_content)
+              (interpolation
+                (identifier
+                  (lower_identifier))
+                format: (format_spec))
+              (string_content))))))))

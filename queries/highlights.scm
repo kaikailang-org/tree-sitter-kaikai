@@ -46,6 +46,7 @@
   "with"
   "extern"
   "opaque"
+  "lazy"
   "kind"
   "over"
   "builtin"
@@ -75,6 +76,7 @@
 
 ; Interpolation
 (interpolation "}" @punctuation.special)
+(format_spec) @string.special
 
 ; Operators
 [
@@ -82,7 +84,8 @@
   "=="  "!="  "<"  "<="  ">"  ">="
   "++"
   ".."
-  "|>"  "||"  "|?"
+  "|>"  "||"  "|?"  "|!"
+  "??"
   "->"  "=>"
   ":="  "="
   "|"

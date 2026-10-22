@@ -110,7 +110,7 @@ npx tree-sitter parse examples/quicksort.kai
 ## Status
 
 Alpha — parses every well-formed `.kai` file in the upstream
-repository (stdlib, compiler, examples and demos) at kaikai 0.139.3.
+repository (stdlib, compiler, examples and demos) at kaikai 0.171.1.
 Naming rules the compiler checks after parsing are applied here while
 parsing: an uppercase parameter or record field, or a lowercase effect
 name, is a syntax error.
