@@ -9,17 +9,18 @@
 const PREC = {
   // Lower number = lower precedence.
   range:    1,   // ..   (list and index ranges only)
-  pipe:     2,   // |>  |  ||  |?
+  pipe:     2,   // |>  |  ||  |?  |!
   lambda:   3,   // x => body  (the body stops before a pipe)
   or:       4,   // or
   and:      5,   // and
   compare:  6,   // == != < <= > >=
-  concat:   7,   // ++
-  add:      8,   // + -
-  mul:      9,   // * / %
-  unary:    10,  // - not @ & (prefix)
-  power:    11,  // ^
-  postfix:  12,  // f(x), x.f, x[i], x!
+  coalesce: 7,   // ??
+  concat:   8,   // ++
+  add:      9,   // + -
+  mul:      10,  // * / %
+  unary:    11,  // - not @ & (prefix)
+  power:    12,  // ^
+  postfix:  13,  // f(x), x.f, x[i], x!
 };
 
 module.exports = grammar({
@@ -94,10 +95,14 @@ module.exports = grammar({
           field('return_type', $._type),
           optional(field('row', $.effect_row)),
         ),
-        seq('type', field('name', $.type_identifier), '=', field('body', $.record_type)),
-        seq('opaque', field('name', $.type_identifier)),
+        seq(optional('pub'), 'type', field('name', $.type_identifier), '=', field('body', $.record_type)),
+        seq(optional('pub'), 'opaque', field('name', $.type_identifier)),
       ),
     ),
+
+    // `pub` exports a declaration; `pub(pkg)` exports it to its own
+    // package's modules alone.
+    _visibility: $ => seq('pub', optional(seq('(', 'pkg', ')'))),
 
     // ---------------------------------------------------------------
     // Comments
@@ -182,7 +187,7 @@ module.exports = grammar({
     // Function declarations
     // ---------------------------------------------------------------
     function_declaration: $ => seq(
-      optional('pub'),
+      optional($._visibility),
       'fn',
       field('name', $.lower_identifier),
       optional(field('type_parameters', $.type_parameters)),
@@ -266,7 +271,7 @@ module.exports = grammar({
     // const / type / effect / protocol / impl / unit / test / axiom
     // ---------------------------------------------------------------
     const_declaration: $ => seq(
-      optional('pub'),
+      optional($._visibility),
       'const',
       field('name', choice($.lower_identifier, $.type_identifier)),
       optional(seq(':', field('type', $._type))),
@@ -275,7 +280,7 @@ module.exports = grammar({
     ),
 
     type_declaration: $ => seq(
-      optional('pub'),
+      optional($._visibility),
       'type',
       field('name', $.type_identifier),
       optional(field('type_parameters', $.type_parameters)),
@@ -354,7 +359,7 @@ module.exports = grammar({
     ),
 
     effect_declaration: $ => seq(
-      optional('pub'),
+      optional($._visibility),
       'effect',
       field('name', $.type_identifier),
       optional(field('type_parameters', $.type_parameters)),
@@ -394,7 +399,7 @@ module.exports = grammar({
     // `protocol Sequence[s: Shape] : Functorial { ... }` — the optional
     // theory after the colon names the laws the protocol obeys.
     protocol_declaration: $ => seq(
-      optional('pub'),
+      optional($._visibility),
       'protocol',
       field('name', $.type_identifier),
       optional(field('type_parameters', $.type_parameters)),
@@ -420,7 +425,7 @@ module.exports = grammar({
     ),
 
     impl_declaration: $ => seq(
-      optional('pub'),
+      optional($._visibility),
       'impl',
       optional(field('type_parameters', $.type_parameters)),
       field('protocol', choice($.type_identifier, $.qualified_type)),
@@ -436,7 +441,7 @@ module.exports = grammar({
     // `kind ... with <word>` declared (`metric m`, `cur USD`). Every
     // introducer but `unit` is an ordinary identifier elsewhere.
     unit_declaration: $ => seq(
-      optional('pub'),
+      optional($._visibility),
       field('introducer', choice('unit', $.lower_identifier)),
       field('name', choice($.lower_identifier, $.type_identifier)),
       optional(seq('=', field('alias', $._unit_expr))),
@@ -464,7 +469,7 @@ module.exports = grammar({
     // `kind Name : Theory [over Domain] [with <introducer>]`. `kind`,
     // `over` and the introducer word are contextual, not reserved.
     kind_declaration: $ => seq(
-      optional('pub'),
+      optional($._visibility),
       'kind',
       field('name', $.type_identifier),
       ':',
@@ -491,7 +496,7 @@ module.exports = grammar({
     // `axiom f[a](x: a) : b` declares a body-less function. `axiom Law`
     // right after an impl asserts that the impl obeys that law.
     axiom_declaration: $ => seq(
-      optional('pub'),
+      optional($._visibility),
       'axiom',
       choice(
         seq(
@@ -913,6 +918,7 @@ module.exports = grammar({
       $.logical_expression,
       $.comparison_expression,
       $.range_expression,
+      $.coalesce_expression,
       $.concat_expression,
       $.arithmetic_expression,
       $.power_expression,
@@ -920,7 +926,7 @@ module.exports = grammar({
 
     pipe_expression: $ => prec.left(PREC.pipe, seq(
       field('left', $._expression),
-      field('operator', choice('|>', '|', '||', '|?')),
+      field('operator', choice('|>', '|', '||', '|?', '|!')),
       field('right', $._expression),
     )),
 
@@ -939,6 +945,13 @@ module.exports = grammar({
       field('start', $._expression),
       field('operator', '..'),
       field('end', $._expression),
+    )),
+
+    // `opt ?? default` unwraps an Option; it groups to the right.
+    coalesce_expression: $ => prec.right(PREC.coalesce, seq(
+      field('left', $._expression),
+      field('operator', '??'),
+      field('right', $._expression),
     )),
 
     concat_expression: $ => prec.right(PREC.concat, seq(
@@ -991,6 +1004,7 @@ module.exports = grammar({
       $.literal,
       $.unit_expression,
       $.list_expression,
+      $.lazy_expression,
       $.map_expression,
       $.set_expression,
       $.tuple_expression,
@@ -1136,6 +1150,23 @@ module.exports = grammar({
       )),
       ']',
     ),
+
+    // `lazy [1, 2, ...rest]`, `lazy [0..]`, `lazy [0, 5..]` build a Seq;
+    // only a lazy literal may leave a range open.
+    lazy_expression: $ => seq(
+      'lazy',
+      '[',
+      optional(seq(
+        sepBy1(',', choice($._expression, $.spread_expression, $.open_range_expression)),
+        optional(','),
+      )),
+      ']',
+    ),
+
+    open_range_expression: $ => prec(PREC.range, seq(
+      field('start', $._expression),
+      field('operator', '..'),
+    )),
 
     // `%{ "a": 1, ...base }`
     map_expression: $ => seq(
@@ -1284,11 +1315,16 @@ module.exports = grammar({
 
     escape_sequence: $ => token.immediate(/\\([\\"'nrtbf0#]|x[0-9a-fA-F]{2}|u\{[0-9a-fA-F]+\}|u[0-9a-fA-F]{4})/),
 
+    // `#{x}`, or with a format spec after the colon: `#{n:05}`,
+    // `#{s:<10}`, `#{r:8.2}`.
     interpolation: $ => seq(
       alias($._interpolation_start, '#{'),
       $._expression,
+      optional(seq(':', field('format', $.format_spec))),
       '}',
     ),
+
+    format_spec: $ => token.immediate(prec(1, /[<>^]?[0-9]*(\.[0-9]+)?/)),
 
     _interpolation_start: $ => token.immediate(prec(2, '#{')),
 
