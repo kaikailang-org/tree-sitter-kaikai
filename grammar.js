@@ -79,7 +79,8 @@ module.exports = grammar({
     ),
 
     // `extern "C"("sym") pub fn f(x: I32) : I32 / Ffi`, plus the foreign
-    // type heads `extern "C" type P = { ... }` and `extern "C" opaque H`.
+    // type heads `extern "C" type P = { ... }` and `extern "C" opaque H[t]`.
+    // With a body, an `extern "C" fn` exports a kaikai function to C.
     extern_declaration: $ => seq(
       'extern',
       field('abi', $.string_literal),
@@ -94,9 +95,18 @@ module.exports = grammar({
           ':',
           field('return_type', $._type),
           optional(field('row', $.effect_row)),
+          optional(field('body', choice(
+            seq('=', $._expression),
+            $.block,
+          ))),
         ),
         seq(optional('pub'), 'type', field('name', $.type_identifier), '=', field('body', $.record_type)),
-        seq(optional('pub'), 'opaque', field('name', $.type_identifier)),
+        seq(
+          optional('pub'),
+          'opaque',
+          field('name', $.type_identifier),
+          optional(field('type_parameters', $.type_parameters)),
+        ),
       ),
     ),
 
@@ -1242,10 +1252,11 @@ module.exports = grammar({
     ),
 
     // Decimal, hex and binary, with the optional width/carrier suffixes
-    // the lexer accepts (`42i32`, `200u8`, `19d`, `7n`, `3i`).
+    // the lexer accepts on every base (`42i32`, `200u8`, `19d`, `7n`,
+    // `0xFFn`, `0b101d`, `3i`). In hex a `d` is a digit, never a suffix.
     integer_literal: $ => token(choice(
-      /0[xX][0-9a-fA-F][0-9a-fA-F_]*(i32|u32|u64|i128|u8)?/,
-      /0[bB][01][01_]*(i32|u32|u64|i128|u8)?/,
+      /0[xX][0-9a-fA-F_]*[0-9a-fA-F][0-9a-fA-F_]*(i32|u32|u64|i128|u8|n|i)?/,
+      /0[bB][01_]*[01][01_]*(i32|u32|u64|i128|u8|d|n|i)?/,
       /\d[\d_]*(i32|u32|u64|i128|u8|d|n|i)?/,
     )),
 

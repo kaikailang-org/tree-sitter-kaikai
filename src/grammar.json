@@ -208,6 +208,40 @@
                       "type": "BLANK"
                     }
                   ]
+                },
+                {
+                  "type": "CHOICE",
+                  "members": [
+                    {
+                      "type": "FIELD",
+                      "name": "body",
+                      "content": {
+                        "type": "CHOICE",
+                        "members": [
+                          {
+                            "type": "SEQ",
+                            "members": [
+                              {
+                                "type": "STRING",
+                                "value": "="
+                              },
+                              {
+                                "type": "SYMBOL",
+                                "name": "_expression"
+                              }
+                            ]
+                          },
+                          {
+                            "type": "SYMBOL",
+                            "name": "block"
+                          }
+                        ]
+                      }
+                    },
+                    {
+                      "type": "BLANK"
+                    }
+                  ]
                 }
               ]
             },
@@ -278,6 +312,22 @@
                     "type": "SYMBOL",
                     "name": "type_identifier"
                   }
+                },
+                {
+                  "type": "CHOICE",
+                  "members": [
+                    {
+                      "type": "FIELD",
+                      "name": "type_parameters",
+                      "content": {
+                        "type": "SYMBOL",
+                        "name": "type_parameters"
+                      }
+                    },
+                    {
+                      "type": "BLANK"
+                    }
+                  ]
                 }
               ]
             }
@@ -7305,11 +7355,11 @@
         "members": [
           {
             "type": "PATTERN",
-            "value": "0[xX][0-9a-fA-F][0-9a-fA-F_]*(i32|u32|u64|i128|u8)?"
+            "value": "0[xX][0-9a-fA-F_]*[0-9a-fA-F][0-9a-fA-F_]*(i32|u32|u64|i128|u8|n|i)?"
           },
           {
             "type": "PATTERN",
-            "value": "0[bB][01][01_]*(i32|u32|u64|i128|u8)?"
+            "value": "0[bB][01_]*[01][01_]*(i32|u32|u64|i128|u8|d|n|i)?"
           },
           {
             "type": "PATTERN",

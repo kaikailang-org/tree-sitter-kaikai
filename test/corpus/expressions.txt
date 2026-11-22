@@ -787,3 +787,22 @@ fn main() : Unit / Stdout = {
                   (lower_identifier))
                 format: (format_spec))
               (string_content))))))))
+
+==================
+Radix literals with carrier suffixes
+==================
+
+fn main() = [0xFFn, 0b101n, 0b101d, 0xFFi32, 1_000n]
+
+---
+
+(source_file
+  (function_declaration
+    name: (lower_identifier)
+    parameters: (parameters)
+    body: (list_expression
+      (literal (integer_literal))
+      (literal (integer_literal))
+      (literal (integer_literal))
+      (literal (integer_literal))
+      (literal (integer_literal)))))

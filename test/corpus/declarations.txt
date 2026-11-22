@@ -452,3 +452,55 @@ extern "C" pub type Pt = { x: I32, y: I32 }
       (record_type_field
         name: (lower_identifier)
         type: (type_identifier)))))
+
+==================
+Extern opaque handle with a type parameter
+==================
+
+extern "C" pub opaque Userdata[t]
+
+---
+
+(source_file
+  (extern_declaration
+    abi: (string_literal (string_content))
+    name: (type_identifier)
+    type_parameters: (type_parameters (type_parameter (lower_identifier)))))
+
+==================
+Exported extern functions
+==================
+
+extern "C" fn cmp(a: Int, b: Int) : Int = a - b
+extern "C"("on_tick") pub fn tick(n: Int) : Unit / Stdout {
+  Stdout.print("tick #{n}")
+}
+
+---
+
+(source_file
+  (extern_declaration
+    abi: (string_literal (string_content))
+    name: (lower_identifier)
+    parameters: (parameters
+      (parameter name: (lower_identifier) type: (type_identifier))
+      (parameter name: (lower_identifier) type: (type_identifier)))
+    return_type: (type_identifier)
+    body: (arithmetic_expression
+      left: (identifier (lower_identifier))
+      right: (identifier (lower_identifier))))
+  (extern_declaration
+    abi: (string_literal (string_content))
+    symbol: (string_literal (string_content))
+    name: (lower_identifier)
+    parameters: (parameters
+      (parameter name: (lower_identifier) type: (type_identifier)))
+    return_type: (type_identifier)
+    row: (effect_row (effect_label (type_identifier)))
+    body: (block
+      (call_expression
+        function: (qualified_identifier (type_identifier) (lower_identifier))
+        arguments: (arguments
+          (literal (string_literal
+            (string_content)
+            (interpolation (identifier (lower_identifier))))))))))

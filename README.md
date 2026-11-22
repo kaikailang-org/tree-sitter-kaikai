@@ -6,19 +6,19 @@ A [tree-sitter](https://tree-sitter.github.io/) grammar for the
 kaikai is a statically-typed functional language with algebraic effects
 as a primitive and Elixir-style pipelines. This grammar tracks the
 surface syntax accepted by `stage2/compiler/parse.kai` in the upstream
-repository, as of kaikai 0.139.
+repository, as of kaikai 0.196.3.
 
 ## Features
 
 - Full coverage of declarations: `fn`, `const`, `type` (sum/record),
   `effect`, `protocol`, `impl`, `kind`, `theory`, `unit` and
   user-declared habitant introducers, `test`, `bench`, `check`,
-  `axiom`, `import`, `use`, `extern "C"` (functions, struct types and
-  opaque handles).
+  `axiom`, `import`, `use`, `extern "C"` (imported and exported
+  functions, struct types and opaque handles with type parameters).
 - Expressions: `if`, `match`, `handle ... with` (state, alias,
   `initially`/`finally`), lambdas, block lambdas and trailing blocks
   (`spawn { ... }`, `each(xs) { x -> ... }`), pipes (`|>`, `|`, `||`,
-  `|?`), lambda placeholders (`f(. + 1)`, `xs | .length`), record,
+  `|?`, `|!`), lambda placeholders (`f(. + 1)`, `xs | .length`), record,
   list, map (`%{ }`) and set (`%[ ]`) literals, postfix `!`.
 - Patterns: literal, range, wildcard, bind, variant, record, list
   with rest, tuple, narrow (`x : T`), `as`-binding, module-qualified
@@ -110,7 +110,7 @@ npx tree-sitter parse examples/quicksort.kai
 ## Status
 
 Alpha — parses every well-formed `.kai` file in the upstream
-repository (stdlib, compiler, examples and demos) at kaikai 0.171.1.
+repository (stdlib, compiler, examples and demos) at kaikai 0.196.3.
 Naming rules the compiler checks after parsing are applied here while
 parsing: an uppercase parameter or record field, or a lowercase effect
 name, is a syntax error.
