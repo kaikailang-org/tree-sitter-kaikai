@@ -504,3 +504,57 @@ extern "C"("on_tick") pub fn tick(n: Int) : Unit / Stdout {
           (literal (string_literal
             (string_content)
             (interpolation (identifier (lower_identifier))))))))))
+
+==================
+Bench declaration
+==================
+
+bench "suma" {
+  suma([1, 2, 3])
+}
+
+---
+
+(source_file
+  (bench_declaration
+    label: (string_literal
+      (string_content))
+    body: (block
+      (call_expression
+        function: (identifier
+          (lower_identifier))
+        arguments: (arguments
+          (list_expression
+            (literal
+              (integer_literal))
+            (literal
+              (integer_literal))
+            (literal
+              (integer_literal))))))))
+
+==================
+Check declaration
+==================
+
+check "monotona" with x: Int {
+  x + 1 > x
+}
+
+---
+
+(source_file
+  (check_declaration
+    label: (string_literal
+      (string_content))
+    parameter: (parameter
+      name: (lower_identifier)
+      type: (type_identifier))
+    body: (block
+      (comparison_expression
+        left: (arithmetic_expression
+          left: (identifier
+            (lower_identifier))
+          right: (literal
+            (integer_literal)))
+        right: (identifier
+          (lower_identifier))))))
